@@ -57,7 +57,6 @@ export const sendEmailWithPassword = async (email) => {
 export const deleteUserAccount = async () => {
   try {
     const user = firebase.auth().currentUser;
-    
     if (user) {
       await user.delete();
       return {};

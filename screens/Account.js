@@ -16,7 +16,7 @@ import { logoutUser, deleteUserAccount } from '../api/auth-api'; // Make sure to
 import { useNavigation } from '@react-navigation/native';
 import 'firebase/compat/auth';
 
-const Profile = () => {
+const Account = () => {
   const navigation = useNavigation();
   const [isEditable, setIsEditable] = useState(false);
   const [name, setName] = useState('');
@@ -271,4 +271,4 @@ const Profile = () => {
   );
 };
 
-export default Profile;
+export default Account;
