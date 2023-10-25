@@ -3,6 +3,7 @@ import {
   Text,
   View,
   SafeAreaView,
+  ImageBackground,
   useWindowDimensions,
 } from 'react-native';
 import React from 'react';
@@ -92,6 +93,7 @@ const OnboardingScreen = () => {
       };
     });
     return (
+     
       <View style={[styles.itemContainer, {width: SCREEN_WIDTH}]}>
         <Animated.Image source={item.image} style={imageAnimationStyle} />
         <Animated.View style={textAnimationStyle}>
@@ -99,10 +101,15 @@ const OnboardingScreen = () => {
           <Text style={styles.itemText}>{item.text}</Text>
         </Animated.View>
       </View>
+     
     );
   };
 
   return (
+    <ImageBackground
+    source={require("../assets/Background.png")}
+    style={{ flex: 1}}
+  >
     <SafeAreaView style={styles.container}>
       <Animated.FlatList
         ref={flatListRef}
@@ -132,6 +139,7 @@ const OnboardingScreen = () => {
         />
       </View>
     </SafeAreaView>
+    </ImageBackground>
   );
 };
 
@@ -140,13 +148,13 @@ export default OnboardingScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'green',
+    //backgroundColor: 'transparent',
   },
   itemContainer: {
     flex: 1,
     justifyContent: 'space-around',
     alignItems: 'center',
-    backgroundColor: 'green',
+    //backgroundColor: 'green',
   },
   itemTitle: {
     textAlign: 'center',

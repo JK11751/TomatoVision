@@ -11,6 +11,7 @@ import "firebase/compat/auth";
 import AuthLoading from "../screens/AuthLoading";
 import { FIREBASE_CONFIG } from "../core/config";
 
+
 const Stack = createStackNavigator();
 
 if (!firebase.apps.length) {
@@ -46,7 +47,7 @@ const Navigation = () => {
           options={{ headerShown: false }}
         />
         <Stack.Screen
-          name="Home"
+          name="DashBoard"
           component={BottomTabNavigator}
           options={{ headerShown: false }}
         />

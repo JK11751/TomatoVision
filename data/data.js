@@ -7,13 +7,13 @@ const data = [
     },
     {
       id: 2,
-      image: require('../assets/tomato_PNG12588.png'),
+      image: require('../assets/Farm.jpeg'),
       title: 'Lorem Ipsum',
       text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
     },
     {
       id: 3,
-      image: require('../assets/tomato_PNG12588.png'),
+      image: require('../assets/Harvest.png'),
       title: 'Lorem Ipsum',
       text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
     },

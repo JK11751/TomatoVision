@@ -10,7 +10,7 @@ import {
   Alert,
   ImageBackground,
 } from "react-native";
-import {useNavigation} from '@react-navigation/native';
+import { useNavigation } from "@react-navigation/native";
 import { MaterialIcons } from "@expo/vector-icons";
 
 import { AntDesign } from "@expo/vector-icons";
@@ -20,8 +20,6 @@ import { passwordValidator } from "../helpers/passwordValidator";
 import { nameValidator } from "../helpers/nameValidator";
 import { signUpUser } from "../api/auth-api";
 
-
-
 const SignUp = () => {
   const [name, setName] = useState({ value: "", error: "" });
   const [email, setEmail] = useState({ value: "", error: "" });
@@ -30,10 +28,9 @@ const SignUp = () => {
   const [error, setError] = useState();
   const navigation = useNavigation();
 
-
   const onSignUpPressed = async () => {
     const nameError = nameValidator(name.value);
-    
+
     const emailError = emailValidator(email.value);
     const passwordError = passwordValidator(password.value);
     if (emailError || passwordError || nameError) {
@@ -49,11 +46,12 @@ const SignUp = () => {
       email: email.value,
       password: password.value,
     });
-  
+
     if (response.success) {
-      
-      Alert.alert("Check your email for verification")
-      navigation.navigate("Login");
+      Alert.alert("Check your email for verification");
+      setTimeout(() => {
+        navigation.navigate("Login");
+      }, 3000);
     } else {
       setError(response.error);
     }
@@ -73,7 +71,7 @@ const SignUp = () => {
             }}
           />
         </View>
-         
+
         <KeyboardAvoidingView>
           <View style={{ alignItems: "center" }}>
             <Text
@@ -121,7 +119,9 @@ const SignUp = () => {
                 errorText={name.error}
               />
             </View>
-            {name.error ? <Text style={{ color: 'red' }}>{name.error}</Text> : null}
+            {name.error ? (
+              <Text style={{ color: "red" }}>{name.error}</Text>
+            ) : null}
 
             {/* Email Input */}
             <View
@@ -161,7 +161,9 @@ const SignUp = () => {
                 placeholder="enter your Email"
               />
             </View>
-            {email.error ? <Text style={{ color: 'red' }}>{email.error}</Text> : null}
+            {email.error ? (
+              <Text style={{ color: "red" }}>{email.error}</Text>
+            ) : null}
           </View>
 
           {/* Password Input */}
@@ -200,7 +202,9 @@ const SignUp = () => {
                 placeholder="enter your Password"
               />
             </View>
-            {password.error ? <Text style={{ color: 'red' }}>{password.error}</Text> : null}
+            {password.error ? (
+              <Text style={{ color: "red" }}>{password.error}</Text>
+            ) : null}
           </View>
 
           {/* Keep me logged in and Forgot Password */}
@@ -232,6 +236,7 @@ const SignUp = () => {
             }}
             loading={loading}
             onPress={onSignUpPressed}
+            
           >
             <Text
               style={{
@@ -256,16 +261,11 @@ const SignUp = () => {
               Already have an account?{" "}
             </Text>
             <TouchableOpacity onPress={() => navigation.navigate("Login")}>
-              <Text style={{ fontWeight: "bold", color: "'#121330'," }}>
-                Login
-              </Text>
+              <Text style={{ fontWeight: "bold", color: "green" }}>Login</Text>
             </TouchableOpacity>
           </View>
         </KeyboardAvoidingView>
-        
-        
       </SafeAreaView>
-      
     </ImageBackground>
   );
 };

@@ -180,7 +180,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   closeButtonContainer: {
-    marginTop:20,
+    marginTop:10,
     borderRadius: 50,
     backgroundColor: "green",
     

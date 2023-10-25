@@ -1,5 +1,6 @@
 import {
   StyleSheet,
+  Alert,
   Text,
   View,
   SafeAreaView,
@@ -25,8 +26,8 @@ const Login = () => {
   const navigation = useNavigation();
   const [email, setEmail] = useState({ value: "", error: "" });
   const [password, setPassword] = useState({ value: "", error: "" });
-  const [loading, setLoading] = useState();
-  const [error, setError] = useState();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null); 
 
   const onLoginPressed = async () => {
     const emailError = emailValidator(email.value);
@@ -37,16 +38,27 @@ const Login = () => {
       return;
     }
     setLoading(true);
+    setError(null)
     const response = await loginUser({
       email: email.value,
       password: password.value,
     });
-    if (response.error) {
-      setError(response.error);
+    setLoading(false); 
+  
+    if (response.success) {
+      if (response.user.emailVerified) {
+        Alert.alert("Login Successful");
+        navigation.navigate("DashBoard");
+      } else {
+        Alert.alert(
+          "Email not verified",
+          "Please check your email for verification."
+        );
+      }
+    } else {
+      setError("Wrong Password or Email");
     }
-    setLoading(false);
   };
-
   return (
     <ImageBackground
       source={require("../assets/Background.png")}
@@ -63,7 +75,7 @@ const Login = () => {
           />
         </View>
           
-
+        
         <KeyboardAvoidingView>
           <View style={{ alignItems: "center" }}>
             <Text
@@ -74,10 +86,16 @@ const Login = () => {
                 color: "#041E42",
               }}
             >
-              Login In to your Account
+              LogIn to your Account
             </Text>
           </View>
-
+          {/*
+          {error ? (
+      <Text style={{ color: "red", textAlign: "center", marginTop: 10 }}>
+        {error}
+      </Text>
+    ) : null}
+          */}
           <View style={{ marginTop: 70 }}>
             <View
               style={{
