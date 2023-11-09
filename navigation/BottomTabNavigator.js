@@ -4,8 +4,7 @@ import { FontAwesome5 } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
 import Contact from '../screens/Contact';
 import Notification from '../screens/Notification';
-import Account from '../screens/Account';
-import Home from '../screens/Home';
+import Home from '../screens/HomeScreen';
 
 const Tab = createBottomTabNavigator();
 

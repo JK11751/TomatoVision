@@ -37,28 +37,31 @@ const Login = () => {
       setPassword({ ...password, error: passwordError });
       return;
     }
+  
     setLoading(true);
-    setError(null)
+    setError(null);
+  
     const response = await loginUser({
       email: email.value,
       password: password.value,
     });
-    setLoading(false); 
   
-    if (response.success) {
+    setLoading(false);
+  
+    if (response.error) {
+      // Handle the login error
+      Alert.alert("Login Failed", response.error);
+    } else {
+      // Check if the user's email is verified
       if (response.user.emailVerified) {
         Alert.alert("Login Successful");
         navigation.navigate("DashBoard");
       } else {
-        Alert.alert(
-          "Email not verified",
-          "Please check your email for verification."
-        );
+        Alert.alert("Email not verified", "Please check your email for verification.");
       }
-    } else {
-      setError("Wrong Password or Email");
     }
   };
+  
   return (
     <ImageBackground
       source={require("../assets/Background.png")}
@@ -204,7 +207,7 @@ const Login = () => {
             loading={loading}
             mode="contained"
             onPress={onLoginPressed}
-          >
+           >
             <Text
               style={{
                 textAlign: "center",

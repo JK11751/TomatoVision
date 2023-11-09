@@ -28,7 +28,7 @@ const AuthLoading = ({ navigation }) => {
       // User is not logged in
       navigation.reset({
         index: 0,
-        routes: [{ name: "Login" }],
+        routes: [{ name: "Onboarding" }],
       });
     }
   });

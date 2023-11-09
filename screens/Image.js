@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import * as ImagePicker from 'expo-image-picker';
 import {
   View,
@@ -8,13 +8,16 @@ import {
   StyleSheet,
   ImageBackground,
   Modal,
-  Button,
 } from "react-native";
-import { FontAwesome } from "@expo/vector-icons"; // Import FontAwesome for the tick icon
+import { FontAwesome } from "@expo/vector-icons"; 
+import * as tf from "@tensorflow/tfjs";
+import { bundleResourceIO } from "@tensorflow/tfjs-react-native";
 
 const ImageScreen = () => {
   const [image, setImage] = useState(null);
   const [isModalVisible, setModalVisible] = useState(false);
+  const [diseaseResult, setDiseaseResult] = useState(null);
+  const [leafDetector, setLeafDetector] = useState(null);
 
   const openCamera = async () => {
     const result = await ImagePicker.requestCameraPermissionsAsync();
@@ -54,7 +57,105 @@ const ImageScreen = () => {
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
   };
+ 
 
+  useEffect(() => {
+    async function loadModel() {
+      console.log("[+] Application started")
+      try {
+        await tf.ready();
+        console.log("[+] Loading custom mask detection model")
+        const modelJson = require("../assets/model/model.json");
+        const modelWeight = require("../assets/model/group1-shard.bin");
+        const loadedModel = await tf.loadLayersModel(
+          bundleResourceIO(modelJson, modelWeight)
+        );
+        console.log("[+] Loading pre-trained face detection model")
+        setLeafDetector(loadedModel);
+        console.log("[+] Model Loaded");
+      } catch (error) {
+        console.error("Error loading model:", error);
+      }
+    }
+    loadModel();
+  }, []);
+
+  const getDisease = async () => {
+    if (!leafDetector) {
+      console.error("Model not loaded yet.");
+      return;
+    }
+
+    if (!image) {
+      console.error("No image selected.");
+      return;
+    }
+
+    try {
+      const response = await fetch(image);
+      console.log("[+] Retrieving image from link :"+image)
+      const rawImageData = await response.arrayBuffer();
+      const imageTensor = preprocessImage(rawImageData);
+
+      // Make predictions using your loaded model
+      const predictions = await leafDetector.predict(imageTensor);
+
+      // Interpret predictions and determine the disease class
+      const diseaseClass = interpretPredictions(predictions);
+
+      // Display the result to the user
+      setDiseaseResult(diseaseClass);
+      toggleModal();
+    } catch (error) {
+      console.error("Error loading image:", error);
+    }
+  };
+  const preprocessImage = (rawImageData) => {
+    const TO_UINT8ARRAY = true;
+    const { width, height, data } = jpeg.decode(rawImageData, TO_UINT8ARRAY);
+  
+    // Resize the image to match the input size expected by your model
+    const resizedImage = tf.image.resizeBilinear(
+      tf.tensor3d(data, [height, width, 3]),
+      [224, 224] // Adjust the dimensions as per your model's input requirements
+    );
+  
+    // Normalize the pixel values to the [0, 1] range
+    const normalizedImage = tf.div(resizedImage, 255.0);
+  
+    return normalizedImage;
+  };
+  
+
+  const interpretPredictions = (predictions) => {
+    const classLabels = ["Disease Class 1", "Disease Class 2", "Disease Class 3"]; // Replace with your actual class labels
+  
+    // Find the index of the class with the highest probability
+    const argMaxIndex = tf.argMax(predictions).dataSync()[0];
+  
+    // Get the corresponding disease class label
+    const detectedDisease = classLabels[argMaxIndex];
+  
+    return detectedDisease;
+  };
+  
+  {/*
+  function imageToTensor(rawImageData){
+    //Function to convert jpeg image to tensors
+    const TO_UINT8ARRAY = true;
+    const { width, height, data } = jpeg.decode(rawImageData, TO_UINT8ARRAY);
+    // Drop the alpha channel info for mobilenet
+    const buffer = new Uint8Array(width * height * 3);
+    let offset = 0; // offset into original data
+    for (let i = 0; i < buffer.length; i += 3) {
+      buffer[i] = data[offset];
+      buffer[i + 1] = data[offset + 1];
+      buffer[i + 2] = data[offset + 2];
+      offset += 4;
+    }
+    return tf.tensor3d(buffer, [height, width, 3]);
+  }
+*/}
   return (
     <ImageBackground
       source={require("../assets/Background.png")}
@@ -76,7 +177,7 @@ const ImageScreen = () => {
         )
         }
 
-        <TouchableOpacity style={styles.detectButton} onPress={toggleModal}>
+        <TouchableOpacity style={styles.detectButton}onPress={getDisease}>
           <Text style={styles.detectButtonText}>Detect</Text>
         </TouchableOpacity>
 
@@ -91,7 +192,7 @@ const ImageScreen = () => {
               <View style={styles.iconContainer}>
                 <FontAwesome name="check" size={24} color="white" />
               </View>
-                <Text style={styles.modalTitle}>Disease</Text>
+                <Text style={styles.modalTitle}> {diseaseResult ? `Detected Disease: ${diseaseResult}` : "Detection in progress..."}</Text>
               
               </View>
               <Text style={styles.modalText}>

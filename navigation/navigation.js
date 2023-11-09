@@ -1,10 +1,15 @@
 import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
+import PredictionScreen from '../screens/PredictionScreen'; 
+import DiseaseDetailedScreen from '../screens/DiseaseDetailedScreen';
+import InitialScreen from "../screens/InitialScreen";
+import ProfileScreen from "../screens/ProfileScreen";
 import Onboarding from "../screens/Onboarding";
+import Account from "../screens/Account";
 import SignUp from "../screens/SignUp";
 import Login from "../screens/Login";
-import BottomTabNavigator from "./BottomTabNavigator";
+import BottomTabNavigator from "../navigation/BottomNav/BottomTabNavigator";
 import ImageScreen from "../screens/Image";
 import firebase from "firebase/compat/app";
 import "firebase/compat/auth";
@@ -36,9 +41,20 @@ const Navigation = () => {
           component={Onboarding}
           options={{ headerShown: false }}
         />
+         <Stack.Screen
+          name="profile"
+          component={ProfileScreen}
+          options={{ headerShown: false }}
+        />
+        
         <Stack.Screen
           name="SignUp"
           component={SignUp}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Account"
+          component={Account}
           options={{ headerShown: false }}
         />
         <Stack.Screen
@@ -46,6 +62,24 @@ const Navigation = () => {
           component={Login}
           options={{ headerShown: false }}
         />
+         <Stack.Screen
+                name='PredictionScreen'
+                component={PredictionScreen}
+                options={{
+                  headerTintColor: '#1A8766',
+                  title: '',
+                  headerTransparent: true
+                }}
+              />
+              <Stack.Screen
+                name='DetailedScreen'
+                component={DiseaseDetailedScreen}
+                options={{
+                  headerTintColor: 'white',
+                  title: '',
+                  headerTransparent: true
+                }}
+              />
         <Stack.Screen
           name="DashBoard"
           component={BottomTabNavigator}
@@ -54,6 +88,11 @@ const Navigation = () => {
         <Stack.Screen
           name="CameraScreen"
           component={ImageScreen}
+          options={{ headerShown: false }}
+        />
+          <Stack.Screen
+          name="InitialScreen"
+          component={InitialScreen}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>
