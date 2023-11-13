@@ -10,24 +10,26 @@ import {
 } from 'react-native';
 
 const DATA = [
-  { id: 1, name: 'Alder', species: 'Alnus' },
+  { id: 1, name: 'Early blight', description: 'Spot of come to ever hand as lady meet on'},
   {
     id: 2,
-    name: 'Black alder',
-    species: 'Alnus glutinosa, Ilex verticillata'
+    name: 'Late blight',
+    description: 'Spot of come to ever hand as lady meet on'
+   
   },
-  { id: 3, name: 'Common alder', species: 'Alnus glutinosa' },
-  { id: 4, name: 'False alder', species: 'Ilex verticillata' },
-  { id: 5, name: 'Gray alder', species: 'Alnus incana' }
+  { id: 3, name: 'Septoria leaf spot', description: 'Spot of come to ever hand as lady meet on'},
+  { id: 4, name: 'Tomato Yellow Leaf Curl Virus', description: 'Spot of come to ever hand as lady meet on' },
+  { id: 5, name: 'Healthy', description: 'Spot of come to ever hand as lady meet on'}
 ];
 
 const DiseaseListScreen = () => {
   const navigation = useNavigation();
-  const renderPlantDisease = () => {
+  const renderPlantDisease = ({ item }) => {
     return (
       <TouchableOpacity
         style={styles.rect3}
-        onPress={() => {navigation.navigate('DetailedScreen');
+        onPress={() => {
+          navigation.navigate('DetailedScreen', { disease: item });
         }}
       >
         <View style={styles.rect6Row}>
@@ -39,8 +41,8 @@ const DiseaseListScreen = () => {
             ></Image>
           </View>
           <View style={styles.potatoEralyBrightColumn}>
-            <Text style={styles.potatoEralyBright}>Tomato Eraly Bright</Text>
-            <Text style={styles.mangoAppleOrange}>Mango, Apple, Orange</Text>
+          <Text style={styles.potatoEralyBright}>{item.name}</Text>
+            <Text style={styles.mangoAppleOrange}>{item.species}</Text>
           </View>
           <Image
             source={require('../assets/images/next.png')}

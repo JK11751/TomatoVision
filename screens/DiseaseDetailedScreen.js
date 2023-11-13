@@ -3,14 +3,18 @@ import {
   StyleSheet,
   Text,
   View,
+  Dimensions,
   Image,
-  TouchableOpacity
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
-import { useNavigation } from "@react-navigation/native";
+import { useRoute } from "@react-navigation/native";
 
+const deviceHeight = Dimensions.get('window').height;
 const DiseaseDetailedScreen = () => {
-  const navigation = useNavigation();
+
+
+  const route = useRoute(); // Get the route object to access params
+  const { disease } = route.params; // Access the passed disease data
+
   return (
     <View style={styles.container}>
       <View style={styles.imageStack}>
@@ -22,7 +26,7 @@ const DiseaseDetailedScreen = () => {
         <View style={styles.rect}>
           <View style={styles.amarylissPotatoColumnRow}>
             <View style={styles.amarylissPotatoColumn}>
-              <Text style={styles.amarylissPotato}>Amaryliss Tomato</Text>
+              <Text style={styles.amarylissPotato}>{disease.name}</Text>
             </View>
             <Image
               source={require('../assets/images/green.png')}
@@ -30,48 +34,23 @@ const DiseaseDetailedScreen = () => {
               style={styles.image2}
             ></Image>
           </View>
-          <View style={styles.rect2}>
-            <View style={styles.image4Row}>
-              <Image
-                source={require('../assets/images/summer.png')}
-                resizeMode='contain'
-                style={styles.image4}
-              ></Image>
-              <Text style={styles.needSunlight}>Need Sunlight</Text>
-              <Image
-                source={require('../assets/images/watering.png')}
-                resizeMode='contain'
-                style={styles.image5}
-              ></Image>
-              <Text style={styles.waterWeekly}>Water Weekly</Text>
-            </View>
-          </View>
           <View style={styles.rect3}>
             <Text style={styles.loremIpsum2}>What is it ?</Text>
             <Text style={styles.loremIpsum1}>
-              Spot of come to ever hand as lady meet on. Delicate contempt
-              received two yet advanced. Gentleman as belonging he commanded
-              believing dejection in by. On no am winding chicken so behaved.
-              Its preserved enjoyment new way behavior. Him yet Devonshire
-              celebrated especially. Unfeeling one provision are smallness
-              resembled repulsive.
+              {disease.description}
             </Text>
           </View>
         </View>
       </View>
-      <TouchableOpacity style={styles.floatBtn} onPress={() => navigation.navigate("CameraScreen")}   >
-        <View style={{ flexDirection: 'row' }}>
-          <Ionicons name={'md-camera'} size={25} color={'white'} />
-          <Text style={styles.floatTxt}>Take a picture</Text>
-        </View>
-      </TouchableOpacity>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   image: {
     top: 0,
@@ -132,12 +111,12 @@ const styles = StyleSheet.create({
     marginRight: 35
   },
   amarylissPotatoColumn: {
-    width: 159
+    width: 200
   },
   image2: {
     width: 59,
     height: 46,
-    marginLeft: 111
+    marginLeft: 80
   },
   amarylissPotatoColumnRow: {
     height: 54,
@@ -218,18 +197,16 @@ const styles = StyleSheet.create({
     marginLeft: 6
   },
   loremIpsum2: {
-    fontFamily: '',
-    color: '#121212',
+   fontWeight: 'bold',
+    color: 'black',
     textAlign: 'justify',
-    fontSize: 15,
+    fontSize: 20,
     top: 10,
-    marginLeft: 6
+    marginLeft: 15
   },
   imageStack: {
     width: 482,
-    height: 718,
-    marginTop: -16,
-    marginLeft: -61
+    height: deviceHeight,
   }
 });
 

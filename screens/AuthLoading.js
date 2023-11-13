@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { ActivityIndicator, Alert } from "react-native";
 import firebase from "firebase/compat/app";
 import Background from "../components/Background";
@@ -28,7 +28,7 @@ const AuthLoading = ({ navigation }) => {
       // User is not logged in
       navigation.reset({
         index: 0,
-        routes: [{ name: "Onboarding" }],
+        routes: [{ name: "Login" }],
       });
     }
   });

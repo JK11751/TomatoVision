@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   StyleSheet,
   Text,
@@ -8,9 +8,24 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import firebase from "firebase/compat/app";
 import { Ionicons } from "@expo/vector-icons";
+import "firebase/compat/auth";
 
 const Home = () => {
+  const [name, setName] = useState("");
+
+  useEffect(() => {
+    const user = firebase.auth().currentUser;
+
+    if (user) {
+      const displayName = user.displayName;
+      if (displayName) {
+        setName(displayName);
+      }
+    }
+  }, []);
+
   const navigation = useNavigation();
   return (
     <ImageBackground
@@ -26,7 +41,12 @@ const Home = () => {
               style={styles.rect2}
             ></Image>
             <View style={styles.rect}>
-              <Text style={styles.loremIpsum}>Hi! Welcome to TomatoVision</Text>
+              <View>
+                <Text style={styles.loremIpsum}>
+                  Hi! <Text style={styles.highlightedName}>{name}</Text> Welcome
+                  to TomatoVision
+                </Text>
+              </View>
               <View style={styles.rect4}>
                 <Text style={styles.healYourCrop}>Protect Your Crop!</Text>
                 <View style={styles.image3Row}>
@@ -96,7 +116,6 @@ const Home = () => {
               style={styles.image10}
             ></Image>
           </View>
-          
         </View>
       </View>
     </ImageBackground>
@@ -107,6 +126,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "white",
+  },
+  highlightedName: {
+    fontWeight: "bold",
+    color: "green",
   },
   rect2: {
     top: -40,
@@ -137,7 +160,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     width: 140,
     position: "absolute",
-    top:120,
+    top: 120,
     left: 35,
     height: 45,
     backgroundColor: "#195F57",
@@ -277,7 +300,7 @@ const styles = StyleSheet.create({
     height: 156,
     backgroundColor: "rgba(255,255,255,1)",
     borderRadius: 27,
-    marginTop: 17,
+    marginTop: 40,
     marginLeft: 22,
     shadowColor: "rgba(0,0,0,1)",
     shadowOffset: {

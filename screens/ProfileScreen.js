@@ -1,14 +1,67 @@
-import React from 'react';
-import { StyleSheet, Text, View, Image, ImageBackground, TouchableOpacity } from 'react-native';
+import React, { useState, useEffect } from "react";
+import { StyleSheet, Text, View, Image, ImageBackground, TouchableOpacity, Modal } from 'react-native';
+import firebase from "firebase/compat/app";
 import { useNavigation } from "@react-navigation/native";
+import "firebase/compat/auth";
+import { logoutUser, deleteUserAccount } from "../api/auth-api";
 
 const ProfileScreen = () => {
   const navigation = useNavigation();
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [logoutModalVisible, setLogoutModalVisible] = useState(false);
+  const [deleteModalVisible, setDeleteModalVisible] = useState(false);
+
+  useEffect(() => {
+    const user = firebase.auth().currentUser;
+
+    if (user) {
+      const displayName = user.displayName;
+      if (displayName) {
+        setName(displayName);
+      }
+
+      const userEmail = user.email;
+      if (userEmail) {
+        setEmail(userEmail);
+      }
+    }
+  }, []);
+  const confirmDeleteAccount = () => {
+    setDeleteModalVisible(true);
+  };
+
+  const handleDeleteAccount = async () => {
+    try {
+      await deleteUserAccount();
+      navigation.navigate('Onboarding');
+      setDeleteModalVisible(false); // Close the modal after account deletion
+    } catch (error) {
+      console.error("Error deleting account: ", error);
+    }
+  };
+  const handleLogout = async () => {
+    setLogoutModalVisible(true);
+  };
+
+  const confirmLogout = async () => {
+    try {
+      await logoutUser();
+      setLogoutModalVisible(false); // Close the modal after logout
+      navigation.navigate('Login');
+    } catch (error) {
+      console.error('An error occurred during logout:', error);
+    }
+  };
+
+
   return (
     <ImageBackground
     source={require("../assets/Background.png")}
     style={{ flex: 1, backgroundColor: "white", alignItems: "center" }}
   >
+
+    
     <View style={styles.container}>
       <View style={styles.image9Stack}>
         <ImageBackground
@@ -25,21 +78,21 @@ const ProfileScreen = () => {
                 style={styles.image2}
               ></Image>
               <View style={styles.bittScottMangetColumn}>
-                <Text style={styles.bittScottManget}>Username</Text>
-                <Text style={styles.bittGmailCom}>email@gmail.com</Text>
+                <Text style={styles.bittScottManget}>{name}</Text>
+                <Text style={styles.bittGmailCom}>{email}</Text>
               </View>
             </View>
           </View>
         </ImageBackground>
         <View style={styles.rect}>
-          <TouchableOpacity onPress={() => navigation.navigate('Account')} style={styles.rect2}>
+          <TouchableOpacity onPress={handleLogout} style={styles.rect2}>
             <View style={styles.image5Row}>
               <Image
-                source={require('../assets/images/edit.png')}
+                source={require('../assets/images/exit.png')}
                 resizeMode='contain'
                 style={styles.image5}
               ></Image>
-              <Text style={styles.editUserAccount}>Edit user account</Text>
+              <Text style={styles.editUserAccount}>Logout </Text>
               <Image
                 source={require('../assets/images/next.png')}
                 resizeMode='contain'
@@ -62,14 +115,14 @@ const ProfileScreen = () => {
               ></Image>
             </View>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.rect4}  onPress={() => navigation.navigate('Account')}>
+          <TouchableOpacity style={styles.rect4}   onPress={confirmDeleteAccount}>
             <View style={styles.image3Row}>
               <Image
-                source={require('../assets/images/exit.png')}
+                source={require('../assets/images/delete.png')}
                 resizeMode='contain'
                 style={styles.image3}
               ></Image>
-              <Text style={styles.logout}>Signout</Text>
+              <Text style={styles.logout}>Delete Account</Text>
               <Image
                 source={require('../assets/images/next.png')}
                 resizeMode='contain'
@@ -80,6 +133,43 @@ const ProfileScreen = () => {
         </View>
       </View>
     </View>
+    <Modal
+        animationType="slide"
+        transparent={true}
+        visible={logoutModalVisible}
+        onRequestClose={() => setLogoutModalVisible(false)}
+      >
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalText}>Are you sure you want to log out?</Text>
+            <TouchableOpacity onPress={confirmLogout} marginBottom={20}>
+              <Text style={styles.modalButtonRed}>Log Out</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => setLogoutModalVisible(false)}>
+              <Text style={styles.modalButton}>Cancel</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={deleteModalVisible}
+        onRequestClose={() => setDeleteModalVisible(false)}
+      >
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalText}>Are you sure you want to delete your account?</Text>
+            <TouchableOpacity onPress={handleDeleteAccount}>
+              <Text style={styles.modalButtonRed}>Delete</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => setDeleteModalVisible(false)}>
+              <Text style={styles.modalButton}>Cancel</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
     </ImageBackground>
   );
 };
@@ -129,7 +219,7 @@ const styles = StyleSheet.create({
     marginTop: 2,
   },
   bittScottMangetColumn: {
-    width: 150,
+    width: 200,
     marginLeft: 13,
     marginBottom: 9,
   },
@@ -181,7 +271,7 @@ const styles = StyleSheet.create({
   image6: {
     width: 29,
     height: 58,
-    marginLeft: 59,
+    marginLeft: 120,
   },
   image5Row: {
     height: 58,
@@ -265,7 +355,7 @@ const styles = StyleSheet.create({
   image8: {
     width: 29,
     height: 58,
-    marginLeft: 124,
+    marginLeft: 60,
   },
   image3Row: {
     height: 58,
@@ -281,6 +371,30 @@ const styles = StyleSheet.create({
     marginTop: -74,
     marginLeft: -23,
   },
+  modalContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  modalContent: {
+    backgroundColor: 'white',
+    padding: 20,
+    borderRadius: 10,
+    alignItems: "center",
+  },
+  modalText: {
+    fontSize: 18,
+    marginBottom: 20,
+  },
+  modalButton: {
+    fontSize: 16,
+    color: "green",
+    marginBottom: 20,
+  },
+  modalButtonRed: {
+    fontSize: 16,
+    color: "red",
+  },
 });
-
 export default ProfileScreen;

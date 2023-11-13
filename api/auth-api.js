@@ -18,10 +18,21 @@ export const signUpUser = async ({ name, email, password }) => {
     await userCredential.user.sendEmailVerification();
 
     return { user: userCredential.user };
-  } catch (error) {
-    console.log(error);
-    return {
-      error: error.message,
+  } 
+
+  catch (error) {
+    if (error.code === 'auth/network-request-failed') {
+      return {
+        error: 'network',
+      };
+    } else if (error.code === 'auth/email-already-in-use') {
+      return {
+        error: 'email-in-use',
+      };
+    } else {
+      return {
+        error: error.message,
+      };
     }
   }
 }

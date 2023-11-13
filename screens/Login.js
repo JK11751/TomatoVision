@@ -1,6 +1,4 @@
 import {
-  StyleSheet,
-  Alert,
   Text,
   View,
   SafeAreaView,
@@ -12,7 +10,8 @@ import {
   ImageBackground,
   Pressable,
 } from "react-native";
-import React, { useState, useEffect } from "react";
+import Toast from 'react-native-root-toast';
+import React, { useState } from "react";
 import { MaterialIcons } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
@@ -20,14 +19,15 @@ import { emailValidator } from "../helpers/emailValidator";
 import { passwordValidator } from "../helpers/passwordValidator";
 import { loginUser } from "../api/auth-api";
 
-const screenWidth = Dimensions.get("window").width;
+const screenWidth = Dimensions.get('window').width;
+const inputFieldWidth = screenWidth * 0.8;
 
 const Login = () => {
   const navigation = useNavigation();
   const [email, setEmail] = useState({ value: "", error: "" });
   const [password, setPassword] = useState({ value: "", error: "" });
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null); 
+
 
   const onLoginPressed = async () => {
     const emailError = emailValidator(email.value);
@@ -39,7 +39,6 @@ const Login = () => {
     }
   
     setLoading(true);
-    setError(null);
   
     const response = await loginUser({
       email: email.value,
@@ -49,15 +48,24 @@ const Login = () => {
     setLoading(false);
   
     if (response.error) {
-      // Handle the login error
-      Alert.alert("Login Failed", response.error);
+      Toast.show('Login Failed. Check your network connectivity.', {
+        duration: Toast.durations.LONG,
+        position:Toast.positions.TOP,
+
+      });
     } else {
       // Check if the user's email is verified
       if (response.user.emailVerified) {
-        Alert.alert("Login Successful");
+        Toast.show('Login Successful.', {
+          duration: Toast.durations.LONG,
+          position:Toast.positions.TOP,
+         
+        });
         navigation.navigate("DashBoard");
       } else {
-        Alert.alert("Email not verified", "Please check your email for verification.");
+        Toast.show('Incorrect Login Credentials', {
+          duration: Toast.durations.LONG,
+        });
       }
     }
   };
@@ -92,13 +100,6 @@ const Login = () => {
               LogIn to your Account
             </Text>
           </View>
-          {/*
-          {error ? (
-      <Text style={{ color: "red", textAlign: "center", marginTop: 10 }}>
-        {error}
-      </Text>
-    ) : null}
-          */}
           <View style={{ marginTop: 70 }}>
             <View
               style={{
@@ -122,7 +123,7 @@ const Login = () => {
                 style={{
                   color: "gray",
                   marginVertical: 10,
-                  width: 300,
+                  width: inputFieldWidth,
                   fontSize: 16,
                 }}
                 returnKeyType="next"
@@ -164,7 +165,7 @@ const Login = () => {
                 style={{
                   color: "gray",
                   marginVertical: 10,
-                  width: 300,
+                  width: inputFieldWidth,
                   fontSize: 16,
                 }}
                 placeholder="enter your Password"

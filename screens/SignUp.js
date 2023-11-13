@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -7,26 +7,40 @@ import {
   SafeAreaView,
   TouchableOpacity,
   KeyboardAvoidingView,
-  Alert,
+  ActivityIndicator,
+  Dimensions,
   ImageBackground,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { MaterialIcons } from "@expo/vector-icons";
-
 import { AntDesign } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
 import { emailValidator } from "../helpers/emailValidator";
 import { passwordValidator } from "../helpers/passwordValidator";
 import { nameValidator } from "../helpers/nameValidator";
+import Toast from "react-native-root-toast";
 import { signUpUser } from "../api/auth-api";
+
+const screenWidth = Dimensions.get("window").width;
+const inputFieldWidth = screenWidth * 0.8;
 
 const SignUp = () => {
   const [name, setName] = useState({ value: "", error: "" });
   const [email, setEmail] = useState({ value: "", error: "" });
   const [password, setPassword] = useState({ value: "", error: "" });
   const [loading, setLoading] = useState();
-  const [error, setError] = useState();
+
   const navigation = useNavigation();
+
+  const showToast = (message, backgroundColor) => {
+    Toast.show(message, {
+      duration: Toast.durations.LONG,
+      position: Toast.positions.TOP,
+      backgroundColor,
+    });
+  };
+
+
 
   const onSignUpPressed = async () => {
     const nameError = nameValidator(name.value);
@@ -46,17 +60,23 @@ const SignUp = () => {
       email: email.value,
       password: password.value,
     });
-
+  
     if (response.success) {
-      Alert.alert("Check your email for verification");
-      setTimeout(() => {
-        navigation.navigate("Login");
-      }, 3000);
+      showToast('Registration Successful. Check your email for verification link', 'green');
+      navigation.navigate("Login");
     } else {
-      setError(response.error);
+      if (response.error === 'network') {
+        showToast('Registration request failed due to a network issue. Please check your connection and try again.', 'red');
+      } else if (response.error === 'email-in-use') {
+        showToast('Registration request failed. Email already in use', 'red');
+      }
     }
+  
     setLoading(false);
   };
+
+  
+
   return (
     <ImageBackground
       source={require("../assets/Background.png")}
@@ -108,7 +128,7 @@ const SignUp = () => {
                 style={{
                   color: "gray",
                   marginVertical: 10,
-                  width: 300,
+                  width: inputFieldWidth,
                   fontSize: 16,
                 }}
                 placeholder="enter your name"
@@ -146,7 +166,7 @@ const SignUp = () => {
                 style={{
                   color: "gray",
                   marginVertical: 10,
-                  width: 300,
+                  width: inputFieldWidth,
                   fontSize: 16,
                 }}
                 returnKeyType="next"
@@ -187,11 +207,12 @@ const SignUp = () => {
               />
 
               <TextInput
+               id="passwordInput" 
                 secureTextEntry={true}
                 style={{
                   color: "gray",
                   marginVertical: 10,
-                  width: 300,
+                  width: inputFieldWidth,
                   fontSize: 16,
                 }}
                 returnKeyType="done"
@@ -207,22 +228,6 @@ const SignUp = () => {
             ) : null}
           </View>
 
-          {/* Keep me logged in and Forgot Password */}
-          <View
-            style={{
-              marginTop: 12,
-              flexDirection: "row",
-              alignItems: "center",
-              justifyContent: "space-between",
-            }}
-          >
-            <Text>Keep me logged in</Text>
-
-            <Text style={{ color: "#007FFF", fontWeight: "500" }}>
-              Forgot Password
-            </Text>
-          </View>
-
           <View style={{ marginTop: 40 }} />
 
           <TouchableOpacity
@@ -234,20 +239,22 @@ const SignUp = () => {
               marginRight: "auto",
               padding: 15,
             }}
-            loading={loading}
             onPress={onSignUpPressed}
-            
           >
-            <Text
-              style={{
-                textAlign: "center",
-                color: "white",
-                fontSize: 16,
-                fontWeight: "bold",
-              }}
-            >
-              SignUp
-            </Text>
+            {!loading ? (
+              <Text
+                style={{
+                  textAlign: "center",
+                  color: "white",
+                  fontSize: 16,
+                  fontWeight: "bold",
+                }}
+              >
+                SignUp
+              </Text>
+            ) : (
+              <ActivityIndicator size="small" color="#fff" />
+            )}
           </TouchableOpacity>
 
           <View style={{ flexDirection: "row", marginTop: 15 }}>
