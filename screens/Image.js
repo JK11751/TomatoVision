@@ -118,7 +118,7 @@ const ImageScreen = () => {
       setResult("No Value");
     } finally {
       setLoading(false);
-      toggleModal;
+      toggleModal();
     }
   };
 
