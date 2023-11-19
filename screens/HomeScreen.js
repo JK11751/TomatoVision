@@ -14,6 +14,21 @@ import "firebase/compat/auth";
 
 const Home = () => {
   const [name, setName] = useState("");
+  const [data, setData] = useState({});
+
+  useEffect(() => {
+    const fetchData = async () => {
+      await fetch(
+        `https://api.openweathermap.org/data/2.5/weather?lat=-1.102554&lon=37.013193&units=metric&APPID=24b76c18df66291f4ebcea2c1b7f414b`
+      )
+        .then((res) => res.json())
+        .then((json) => {
+          setData(json);
+         // console.log(json);
+        });
+    };
+    fetchData();
+  }, []);
 
   useEffect(() => {
     const user = firebase.auth().currentUser;
@@ -90,18 +105,16 @@ const Home = () => {
               <View style={styles.rect7}>
                 <View style={styles.today14JulColumnRow}>
                   <View style={styles.today14JulColumn}>
-                    <Text style={styles.today14Jul}>Today, 14 Jul</Text>
-                    <Text style={styles.today15}>27.7° C</Text>
-                    <Text style={styles.sunset632Pm}>Sunset 6.32 PM</Text>
+                    <Text style={styles.today14Jul}>
+                      Temp:{data.main?.temp}°C
+                    </Text>
+                    <Text style={styles.today15}>
+                      Wind Speed:{data.wind?.speed} m/s
+                    </Text>
                   </View>
-                  <Image
-                    source={require("../assets/images/rain.png")}
-                    resizeMode="contain"
-                    style={styles.image9}
-                  ></Image>
                 </View>
                 <Text style={styles.rainUntilAfternoon}>
-                  Rain until afternoon 75%
+                  Humidity:{data.main?.humidity}%
                 </Text>
               </View>
             </View>
@@ -319,7 +332,7 @@ const styles = StyleSheet.create({
   today15: {
     fontFamily: "",
     color: "#195F57",
-    fontSize: 20,
+    fontSize: 16,
     marginTop: 6,
   },
   sunset632Pm: {
@@ -328,10 +341,10 @@ const styles = StyleSheet.create({
     fontSize: 13,
     marginTop: 3,
     marginLeft: 1,
-    width: 90,
+    width: 120,
   },
   today14JulColumn: {
-    width: 84,
+    width: 154,
     marginTop: 2,
   },
   image9: {

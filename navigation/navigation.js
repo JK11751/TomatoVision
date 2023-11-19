@@ -3,13 +3,11 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import PredictionScreen from '../screens/PredictionScreen'; 
 import DiseaseDetailedScreen from '../screens/DiseaseDetailedScreen';
-import InitialScreen from "../screens/InitialScreen";
 import ProfileScreen from "../screens/ProfileScreen";
 import Onboarding from "../screens/Onboarding";
-import Account from "../screens/Account";
 import SignUp from "../screens/SignUp";
 import Login from "../screens/Login";
-import BottomTabNavigator from "../navigation/BottomNav/BottomTabNavigator";
+import BottomTabNavigator from "./BottomTabNavigator";
 import ImageScreen from "../screens/Image";
 import firebase from "firebase/compat/app";
 import "firebase/compat/auth";
@@ -53,11 +51,6 @@ const Navigation = () => {
           options={{ headerShown: false }}
         />
         <Stack.Screen
-          name="Account"
-          component={Account}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
           name="Login"
           component={Login}
           options={{ headerShown: false }}
@@ -88,11 +81,6 @@ const Navigation = () => {
         <Stack.Screen
           name="CameraScreen"
           component={ImageScreen}
-          options={{ headerShown: false }}
-        />
-          <Stack.Screen
-          name="InitialScreen"
-          component={InitialScreen}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>

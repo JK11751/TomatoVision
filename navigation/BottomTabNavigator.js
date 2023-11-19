@@ -1,60 +1,50 @@
-import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { FontAwesome5 } from '@expo/vector-icons'; 
-import { Ionicons } from '@expo/vector-icons';
-import Contact from '../screens/Contact';
-import Notification from '../screens/Notification';
-import Home from '../screens/HomeScreen';
+import * as React from 'react';
 
-const Tab = createBottomTabNavigator();
+import TabBarIcon from '../components/TabBarIcon';
 
-const BottomTabNavigator=()=> {
+import TabBarLabel from '../components/TabBarLabel';
+import HomeScreen from '../screens/HomeScreen';
+import DiseaseListScreen from '../screens/DiseaseListScreen';
+import ProfileScreen from '../screens/ProfileScreen';
+
+const BottomTab = createBottomTabNavigator();
+const INITIAL_ROUTE_NAME = 'Home';
+
+export default function CustomerBottomTabNavigator() {
+  
 
   return (
-    <Tab.Navigator>
-    <Tab.Screen
-    name="Home"
-    component={Home}
-    options={{
-      
-      tabBarIcon: ({ color, size }) => (
-        <FontAwesome5 name="home" size={size} color={color} />
-      ),
-      headerShown: false
-    }}
-    />
-    <Tab.Screen
-    name="Contact"
-    component={Contact}
-    options={{
-      tabBarIcon: ({ color, size }) => (
-        <FontAwesome5 name="phone" size={size} color={color} />
-      ),
-      headerShown: false
-    }}
-    />
-    <Tab.Screen
-     name="Notifications"
-     component={Notification}
-     options={{
-      tabBarIcon: ({ color, size }) => (
-        <Ionicons name="notifications" size={24} color={color} />
-      ),
-      headerShown: false
-    }}
-    />
-    <Tab.Screen
-    name="Account"
-    component={Account}
-    options={{
-      tabBarIcon: ({ color, size }) => (
-        <FontAwesome5 name="user" size={size} color={color} />
-      ),
-      headerShown: false
-    }}
-    />
-    </Tab.Navigator>
+    <BottomTab.Navigator initialRouteName={INITIAL_ROUTE_NAME}>
+      <BottomTab.Screen
+        name='Home'
+        component={HomeScreen}
+        options={{
+          tabBarLabel: () => <TabBarLabel label='Home' />,
+          tabBarIcon: () => <TabBarIcon name='md-home' />,
+          headerShown: false
+        }}
+        
+      />
+
+      <BottomTab.Screen
+        name='Diseases'
+        component={DiseaseListScreen}
+        options={{
+          tabBarLabel: () => <TabBarLabel label='Plant diseases' />,
+          tabBarIcon: () => <TabBarIcon name='md-leaf' />,
+          headerShown: false
+        }}
+      />
+      <BottomTab.Screen
+        name='Profile'
+        component={ProfileScreen}
+        options={{
+          tabBarLabel: () => <TabBarLabel label='Profile' />,
+          tabBarIcon: () => <TabBarIcon name='md-person' />,
+          headerShown: false
+        }}
+      />
+    </BottomTab.Navigator>
   );
 }
-
-export default BottomTabNavigator;

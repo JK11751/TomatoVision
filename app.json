@@ -11,6 +11,16 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
+    "plugins": [
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Allow $(PRODUCT_NAME) to access your photos.",
+          "cameraPermission": "Allow $(PRODUCT_NAME) to access your camera"
+         
+        }
+      ]
+    ],
     "assetBundlePatterns": [
       "**/*"
     ],
@@ -26,5 +36,7 @@
     "web": {
       "favicon": "./assets/favicon.png"
     }
+  
+    
   }
 }

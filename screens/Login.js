@@ -207,7 +207,7 @@ const Login = () => {
             }}
             loading={loading}
             mode="contained"
-            onPress={onLoginPressed}
+            onPress={() => navigation.navigate("DashBoard")}
            >
             <Text
               style={{
