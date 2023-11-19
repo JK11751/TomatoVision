@@ -13,7 +13,7 @@ import {
 } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 import axios from "axios";
-import Config from "react-native-config";
+//import Config from "react-native-config";
 
 axios.interceptors.request.use(
   async (config) => {
@@ -27,7 +27,6 @@ axios.interceptors.request.use(
   },
   (error) => error
 );
-
 
 export const configureUrl = (url) => {
   let authUrl = url;
@@ -50,7 +49,6 @@ const ImageScreen = () => {
   const [label, setLabel] = useState("");
   const [image, setImage] = useState("");
   const [isModalVisible, setModalVisible] = useState(false);
-  const [isLoading, setLoading] = useState(false);
 
   const openCamera = async () => {
     const response = await ImagePicker.requestCameraPermissionsAsync(options);
@@ -62,6 +60,7 @@ const ImageScreen = () => {
       if (!response.canceled) {
         // Image was taken successfully
         const uri = response?.assets[0]?.uri;
+        console.log(uri);
         const path = Platform.OS !== "ios" ? uri : "file://" + uri;
         getResult(path, response);
       } else {
@@ -77,8 +76,10 @@ const ImageScreen = () => {
     let response = await ImagePicker.launchImageLibraryAsync(options);
     if (!response.canceled) {
       const uri = response?.assets[0]?.uri;
+      console.log(uri);
       const path = Platform.OS !== "ios" ? uri : "file://" + uri;
       getResult(path, response);
+      console.log(getResult);
     } else {
       Toast.show("Camera operation cancelled or encountered an error:", {
         duration: Toast.durations.SHORT,
@@ -93,18 +94,25 @@ const ImageScreen = () => {
 
   const getResult = async (path, response) => {
     setImage(path);
-    setLabel("");
+    setLabel("Predicting please wait...");
     setResult("");
     const params = {
       uri: path,
       name: response.assets[0].fileName,
       type: response.assets[0].type,
     };
-    const res = await getPredication(params);
-    if (res?.data?.class) {
-      setLabel(res.data.class);
-      setResult(res.data.confidence);
-    } else {
+
+    try {
+      const res = await getPredication(params);
+      if (res?.data?.class) {
+        setLabel(res.data.class);
+        setResult(res.data.confidence);
+      } else {
+        setLabel("Failed to predict");
+        setResult("No Value");
+      }
+    } catch (error) {
+      console.error("Error predicting image:", error);
       setLabel("Failed to predict");
       setResult("No Value");
     }
@@ -112,11 +120,14 @@ const ImageScreen = () => {
 
   const getPredication = async (params) => {
     setLoading(true);
+
     return new Promise((resolve, reject) => {
       var bodyFormData = new FormData();
       bodyFormData.append("file", params);
-      const url = Config.URL;
-      return axios
+      const url =
+        "https://firebasestorage.googleapis.com/v0/b/tomatovision-7f4ff.appspot.com/api/predict";
+      console.log(url);
+      axios
         .post(url, bodyFormData)
         .then((response) => {
           resolve(response);
@@ -151,12 +162,8 @@ const ImageScreen = () => {
           />
         )}
 
-        <TouchableOpacity style={styles.detectButton} onPress={getPredication}>
-          {!isLoading ? (
-            <Text style={styles.detectButtonText}>Detect</Text>
-          ) : (
-            <ActivityIndicator size="small" color="#fff" />
-          )}
+        <TouchableOpacity style={styles.detectButton} onPress={getResult}>
+          <Text style={styles.detectButtonText}>Detect</Text>
         </TouchableOpacity>
         {result && label && (
           <Modal
@@ -219,7 +226,7 @@ const styles = StyleSheet.create({
   },
   detectButton: {
     backgroundColor: "#3498db",
-    marginTop: 40,
+    marginTop: 6,
     padding: 10,
     width: 250,
     borderRadius: 5,
