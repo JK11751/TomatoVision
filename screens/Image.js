@@ -6,8 +6,8 @@ import {
   Text,
   Image,
   TouchableOpacity,
-  StyleSheet,
   ActivityIndicator,
+  StyleSheet,
   ImageBackground,
   Modal,
 } from "react-native";
@@ -48,18 +48,18 @@ const ImageScreen = () => {
   const [result, setResult] = useState("");
   const [label, setLabel] = useState("");
   const [image, setImage] = useState("");
+  const [isLoading, setLoading] = useState(false);
   const [isModalVisible, setModalVisible] = useState(false);
 
   const openCamera = async () => {
-    const response = await ImagePicker.requestCameraPermissionsAsync(options);
-    if (response.granted === false) {
+    const result = await ImagePicker.requestCameraPermissionsAsync(options);
+    if (result.granted === false) {
       alert("Kindly allow this app to access your camera!");
     } else {
       const response = await ImagePicker.launchCameraAsync(options);
 
       if (!response.canceled) {
-        // Image was taken successfully
-        const uri = response?.assets[0]?.uri;
+        const uri = response.assets[0].uri;
         console.log(uri);
         const path = Platform.OS !== "ios" ? uri : "file://" + uri;
         getResult(path, response);
@@ -75,13 +75,13 @@ const ImageScreen = () => {
   const pickImage = async () => {
     let response = await ImagePicker.launchImageLibraryAsync(options);
     if (!response.canceled) {
-      const uri = response?.assets[0]?.uri;
+      const uri = response.assets[0].uri;
       console.log(uri);
       const path = Platform.OS !== "ios" ? uri : "file://" + uri;
       getResult(path, response);
       console.log(getResult);
     } else {
-      Toast.show("Camera operation cancelled or encountered an error:", {
+      Toast.show("Image Selection cancelled or encountered an error:", {
         duration: Toast.durations.SHORT,
         position: Toast.positions.TOP,
       });
@@ -96,6 +96,7 @@ const ImageScreen = () => {
     setImage(path);
     setLabel("Predicting please wait...");
     setResult("");
+    setLoading(true);
     const params = {
       uri: path,
       name: response.assets[0].fileName,
@@ -115,17 +116,18 @@ const ImageScreen = () => {
       console.error("Error predicting image:", error);
       setLabel("Failed to predict");
       setResult("No Value");
+    } finally {
+      setLoading(false);
+      toggleModal;
     }
   };
 
   const getPredication = async (params) => {
-    setLoading(true);
-
     return new Promise((resolve, reject) => {
       var bodyFormData = new FormData();
       bodyFormData.append("file", params);
       const url =
-        "https://firebasestorage.googleapis.com/v0/b/tomatovision-7f4ff.appspot.com/api/predict";
+        "http://ec2-34-228-195-240.compute-1.amazonaws.com/api/predict";
       console.log(url);
       axios
         .post(url, bodyFormData)
@@ -148,11 +150,9 @@ const ImageScreen = () => {
         <TouchableOpacity style={styles.button} onPress={openCamera}>
           <Text style={styles.detectButtonText}>Open Camera</Text>
         </TouchableOpacity>
-
         <TouchableOpacity style={styles.button} onPress={pickImage}>
           <Text style={styles.detectButtonText}>Open Gallery</Text>
         </TouchableOpacity>
-
         {image.length ? (
           <Image source={{ uri: image }} style={styles.image} />
         ) : (
@@ -161,9 +161,13 @@ const ImageScreen = () => {
             style={styles.image}
           />
         )}
-
-        <TouchableOpacity style={styles.detectButton} onPress={getResult}>
-          <Text style={styles.detectButtonText}>Detect</Text>
+          <TouchableOpacity style={styles.detectButton} onPress={getResult}>
+          {!isLoading ? (
+            <Text style={styles.detectButtonText}>Detect</Text>
+          ) : (
+            <ActivityIndicator size="small" color="#fff" />
+          )}
+  
         </TouchableOpacity>
         {result && label && (
           <Modal
@@ -178,10 +182,6 @@ const ImageScreen = () => {
                     <FontAwesome name="check" size={24} color="white" />
                   </View>
                   <Text style={styles.modalTitle}> {label} </Text>
-                  <Text style={styles.modalTitle1}>
-                    {" "}
-                    {parseFloat(result).toFixed(2) + "%"}
-                  </Text>
                 </View>
                 <TouchableOpacity
                   style={styles.closeButtonContainer}
