@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Toast from "react-native-root-toast";
 import * as ImagePicker from "expo-image-picker";
+import * as ImageManipulator from "expo-image-manipulator";
 import {
   View,
   Text,
@@ -13,7 +14,6 @@ import {
 } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 import axios from "axios";
-//import Config from "react-native-config";
 
 axios.interceptors.request.use(
   async (config) => {
@@ -36,14 +36,6 @@ export const configureUrl = (url) => {
   return authUrl;
 };
 
-const options = {
-  mediaType: "photo",
-  quality: 1,
-  width: 256,
-  height: 256,
-  includeBase64: true,
-};
-
 const ImageScreen = () => {
   const [result, setResult] = useState("");
   const [label, setLabel] = useState("");
@@ -52,17 +44,46 @@ const ImageScreen = () => {
   const [isModalVisible, setModalVisible] = useState(false);
 
   const openCamera = async () => {
-    const result = await ImagePicker.requestCameraPermissionsAsync(options);
+    const result = await ImagePicker.requestCameraPermissionsAsync();
     if (result.granted === false) {
       alert("Kindly allow this app to access your camera!");
     } else {
-      const response = await ImagePicker.launchCameraAsync(options);
+      const response = await ImagePicker.launchCameraAsync({
+        mediaType: "photo",
+        allowsEditing: true,
+        aspect: [1, 1],
+        quality: 1,
+      });
 
       if (!response.canceled) {
         const uri = response.assets[0].uri;
-        console.log(uri);
-        const path = Platform.OS !== "ios" ? uri : "file://" + uri;
-        getResult(path, response);
+        console.log("original url:", uri);
+
+        // Resize and crop the image to 256x256 pixels
+        const manipulatedImage = await ImageManipulator.manipulateAsync(
+          uri,
+          [
+            {
+              resize: {
+                width: 256,
+                height: 256,
+              },
+            },
+          ],
+          {
+            base64: true,
+            format: "jpeg", // You can specify the desired format here
+            compress: 1, // Quality of the image, 1 means no compression
+          }
+        );
+        // Use the manipulated image for further processing
+        const path =
+          Platform.OS !== "ios"
+            ? manipulatedImage.uri
+            : "file://" + manipulatedImage.uri;
+        getResult(path, manipulatedImage);
+        console.log("path:", path);
+        console.log("manimage:", manipulatedImage);
       } else {
         Toast.show("Camera operation cancelled or encountered an error:", {
           duration: Toast.durations.SHORT,
@@ -73,13 +94,41 @@ const ImageScreen = () => {
   };
 
   const pickImage = async () => {
-    let response = await ImagePicker.launchImageLibraryAsync(options);
+    let response = await ImagePicker.launchImageLibraryAsync({
+      mediaType: "photo",
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 1,
+    });
     if (!response.canceled) {
       const uri = response.assets[0].uri;
-      console.log(uri);
-      const path = Platform.OS !== "ios" ? uri : "file://" + uri;
-      getResult(path, response);
-      console.log(getResult);
+      console.log("original url:", uri);
+
+      // Resize and crop the image to 256x256 pixels
+      const manipulatedImage = await ImageManipulator.manipulateAsync(
+        uri,
+        [
+          {
+            resize: {
+              width: 256,
+              height: 256,
+            },
+          },
+        ],
+        {
+          base64: true,
+          format: "jpeg", // You can specify the desired format here
+          compress: 1, // Quality of the image, 1 means no compression
+        }
+      );
+      // Use the manipulated image for further processing
+      const path =
+        Platform.OS !== "ios"
+          ? manipulatedImage.uri
+          : "file://" + manipulatedImage.uri;
+      getResult(path, manipulatedImage);
+      console.log("path:", path);
+      console.log("manimage:", manipulatedImage);
     } else {
       Toast.show("Image Selection cancelled or encountered an error:", {
         duration: Toast.durations.SHORT,
@@ -90,13 +139,18 @@ const ImageScreen = () => {
 
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
+    setLoading(false);
   };
 
   const getResult = async (path, response) => {
+    setLoading(true);
     setImage(path);
+    toggleModal();
     setLabel("Predicting please wait...");
     setResult("");
-    setLoading(true);
+    console.log("Predicting please wait...");
+    setResult("");
+
     const params = {
       uri: path,
       name: response.assets[0].fileName,
@@ -105,20 +159,21 @@ const ImageScreen = () => {
 
     try {
       const res = await getPredication(params);
+      console.log("Result", res);
       if (res?.data?.class) {
         setLabel(res.data.class);
         setResult(res.data.confidence);
       } else {
         setLabel("Failed to predict");
-        setResult("No Value");
+        console.log("Failed to predict");
+        setResult("Nothing");
       }
     } catch (error) {
-      console.error("Error predicting image:", error);
-      setLabel("Failed to predict");
-      setResult("No Value");
+      setLabel("Null");
+      console.log("Failed to connect to url api");
+      setResult("Null");
     } finally {
       setLoading(false);
-      toggleModal();
     }
   };
 
@@ -126,14 +181,15 @@ const ImageScreen = () => {
     return new Promise((resolve, reject) => {
       var bodyFormData = new FormData();
       bodyFormData.append("file", params);
-      const url =
-        "http://ec2-34-228-195-240.compute-1.amazonaws.com/api/predict";
+      const url = "http://10.0.2.2:8000/predict";
       console.log(url);
+      console.log("formdata", bodyFormData);
       axios
         .post(url, bodyFormData)
         .then((response) => {
           resolve(response);
         })
+
         .catch((error) => {
           setLabel("Failed to predict.");
           reject("err", error);
@@ -161,38 +217,37 @@ const ImageScreen = () => {
             style={styles.image}
           />
         )}
-          <TouchableOpacity style={styles.detectButton} onPress={getResult}>
+        <TouchableOpacity style={styles.detectButton} onPress={getResult}>
           {!isLoading ? (
             <Text style={styles.detectButtonText}>Detect</Text>
           ) : (
             <ActivityIndicator size="small" color="#fff" />
           )}
-  
         </TouchableOpacity>
-        {result && label && (
-          <Modal
-            animationType="slide"
-            transparent={true}
-            visible={isModalVisible}
-          >
-            <View style={styles.modalContainer}>
-              <View style={styles.modalContent}>
-                <View style={styles.modalTitleContainer}>
-                  <View style={styles.iconContainer}>
-                    <FontAwesome name="check" size={24} color="white" />
-                  </View>
-                  <Text style={styles.modalTitle}> {label} </Text>
+
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={isModalVisible}
+        >
+          <View style={styles.modalContainer}>
+            <View style={styles.modalContent}>
+              <View style={styles.modalTitleContainer}>
+                <View style={styles.iconContainer}>
+                  <FontAwesome name="check" size={24} color="white" />
                 </View>
-                <TouchableOpacity
-                  style={styles.closeButtonContainer}
-                  onPress={toggleModal}
-                >
-                  <Text style={styles.closeButtonText}>Got it</Text>
-                </TouchableOpacity>
+                <Text style={styles.modalTitle}> {label} </Text>
+                <Text style={styles.modalTitle1}> {result} </Text>
               </View>
+              <TouchableOpacity
+                style={styles.closeButtonContainer}
+                onPress={toggleModal}
+              >
+                <Text style={styles.closeButtonText}>Got it</Text>
+              </TouchableOpacity>
             </View>
-          </Modal>
-        )}
+          </View>
+        </Modal>
       </View>
     </ImageBackground>
   );
@@ -219,8 +274,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   image: {
-    width: 400,
-    height: "40%",
+    width: 256,
+    height: 256,
     borderRadius: 10,
     marginVertical: 20,
   },
@@ -243,7 +298,7 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(0, 0, 0, 0.5)",
   },
   modalContent: {
-    height: 140,
+    height: 160,
     backgroundColor: "white",
     padding: 20,
     borderRadius: 10,
@@ -266,7 +321,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   closeButtonContainer: {
-    marginTop: 20,
+    marginTop: 8,
     borderRadius: 50,
     backgroundColor: "green",
 
