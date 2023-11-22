@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Toast from "react-native-root-toast";
 import * as ImagePicker from "expo-image-picker";
-import * as ImageManipulator from "expo-image-manipulator";
+//import * as ImageManipulator from "expo-image-manipulator";
 import {
   View,
   Text,
@@ -16,17 +16,20 @@ import { FontAwesome } from "@expo/vector-icons";
 import axios from "axios";
 
 axios.interceptors.request.use(
-  async (config) => {
-    let request = config;
-    request.headers = {
-      "Content-Type": "application/json",
-      Accept: "application/json",
+  config => {
+    config.headers = {
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
     };
-    request.url = configureUrl(config.url);
-    return request;
+    config.url = configureUrl(config.url);
+    return config;
   },
-  (error) => error
+  error => {
+    console.error('Request error:', error);
+    return Promise.reject(error);
+  }
 );
+
 
 export const configureUrl = (url) => {
   let authUrl = url;
@@ -36,6 +39,14 @@ export const configureUrl = (url) => {
   return authUrl;
 };
 
+const options = {
+  mediaType: "photo",
+  quality: 1,
+  width: 256,
+  height: 256,
+  includeBase64: true,
+};
+
 const ImageScreen = () => {
   const [result, setResult] = useState("");
   const [label, setLabel] = useState("");
@@ -43,47 +54,24 @@ const ImageScreen = () => {
   const [isLoading, setLoading] = useState(false);
   const [isModalVisible, setModalVisible] = useState(false);
 
+  
+
   const openCamera = async () => {
     const result = await ImagePicker.requestCameraPermissionsAsync();
     if (result.granted === false) {
       alert("Kindly allow this app to access your camera!");
     } else {
-      const response = await ImagePicker.launchCameraAsync({
-        mediaType: "photo",
-        allowsEditing: true,
-        aspect: [1, 1],
-        quality: 1,
-      });
-
+      const response = await ImagePicker.launchCameraAsync(options)
       if (!response.canceled) {
-        const uri = response.assets[0].uri;
-        console.log("original url:", uri);
-
-        // Resize and crop the image to 256x256 pixels
-        const manipulatedImage = await ImageManipulator.manipulateAsync(
-          uri,
-          [
-            {
-              resize: {
-                width: 256,
-                height: 256,
-              },
-            },
-          ],
-          {
-            base64: true,
-            format: "jpeg", // You can specify the desired format here
-            compress: 1, // Quality of the image, 1 means no compression
-          }
-        );
-        // Use the manipulated image for further processing
-        const path =
-          Platform.OS !== "ios"
-            ? manipulatedImage.uri
-            : "file://" + manipulatedImage.uri;
-        getResult(path, manipulatedImage);
-        console.log("path:", path);
-        console.log("manimage:", manipulatedImage);
+         const uri = response.assets[0].uri;
+         console.log("uri:", uri)
+         const path = Platform.OS !== "ios" ? uri : "file://" + uri;
+         
+        getResult(path, response);
+         console.log("Response:", response)
+        console.log("path:", path)
+       
+       
       } else {
         Toast.show("Camera operation cancelled or encountered an error:", {
           duration: Toast.durations.SHORT,
@@ -94,41 +82,14 @@ const ImageScreen = () => {
   };
 
   const pickImage = async () => {
-    let response = await ImagePicker.launchImageLibraryAsync({
-      mediaType: "photo",
-      allowsEditing: true,
-      aspect: [1, 1],
-      quality: 1,
-    });
+    let response = await ImagePicker.launchImageLibraryAsync(options);
     if (!response.canceled) {
-      const uri = response.assets[0].uri;
-      console.log("original url:", uri);
-
-      // Resize and crop the image to 256x256 pixels
-      const manipulatedImage = await ImageManipulator.manipulateAsync(
-        uri,
-        [
-          {
-            resize: {
-              width: 256,
-              height: 256,
-            },
-          },
-        ],
-        {
-          base64: true,
-          format: "jpeg", // You can specify the desired format here
-          compress: 1, // Quality of the image, 1 means no compression
-        }
-      );
-      // Use the manipulated image for further processing
-      const path =
-        Platform.OS !== "ios"
-          ? manipulatedImage.uri
-          : "file://" + manipulatedImage.uri;
-      getResult(path, manipulatedImage);
-      console.log("path:", path);
-      console.log("manimage:", manipulatedImage);
+       const uri = response.assets[0].uri;
+       const path = Platform.OS !== "ios" ? uri : "file://" + uri;
+       getResult(path, response);
+      console.log("path:", path)
+      console.log("Response:", response)
+       
     } else {
       Toast.show("Image Selection cancelled or encountered an error:", {
         duration: Toast.durations.SHORT,
@@ -139,7 +100,12 @@ const ImageScreen = () => {
 
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
-    setLoading(false);
+
+    // Clear image, result, and label when the modal is closed
+    //if (!isModalVisible) {
+      ///setLoading(false);
+     // clearImage();
+    //}
   };
 
   const getResult = async (path, response) => {
@@ -151,12 +117,12 @@ const ImageScreen = () => {
     console.log("Predicting please wait...");
     setResult("");
 
-    const params = {
+   const params = {
       uri: path,
       name: response.assets[0].fileName,
       type: response.assets[0].type,
     };
-
+  
     try {
       const res = await getPredication(params);
       console.log("Result", res);
@@ -172,13 +138,12 @@ const ImageScreen = () => {
       setLabel("Null");
       console.log("Failed to connect to url api");
       setResult("Null");
-    } finally {
-      setLoading(false);
     }
+    setLoading(false);
   };
 
   const getPredication = async (params) => {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => { 
       var bodyFormData = new FormData();
       bodyFormData.append("file", params);
       const url = "http://10.0.2.2:8000/predict";
@@ -209,7 +174,7 @@ const ImageScreen = () => {
         <TouchableOpacity style={styles.button} onPress={pickImage}>
           <Text style={styles.detectButtonText}>Open Gallery</Text>
         </TouchableOpacity>
-        {image.length ? (
+        {image? (
           <Image source={{ uri: image }} style={styles.image} />
         ) : (
           <Image
@@ -236,8 +201,19 @@ const ImageScreen = () => {
                 <View style={styles.iconContainer}>
                   <FontAwesome name="check" size={24} color="white" />
                 </View>
-                <Text style={styles.modalTitle}> {label} </Text>
-                <Text style={styles.modalTitle1}> {result} </Text>
+                <Text style={[styles.space, styles.labelText]}>
+                  {"Disease: \n"}
+                  <Text style={styles.resultText}>{label}</Text>
+                </Text>
+                
+                <Text style={[styles.space, styles.labelText]}>
+                  {"Confidence: \n"}
+                  <Text style={styles.resultText}>
+                    {parseFloat(result).toFixed(2) + "%"}
+                  </Text>
+          
+                </Text>
+                
               </View>
               <TouchableOpacity
                 style={styles.closeButtonContainer}
@@ -297,8 +273,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "rgba(0, 0, 0, 0.5)",
   },
+  space: { marginVertical: 10, marginHorizontal: 10 },
+  labelText: { color: "black", fontSize: 30, fontWeight: "bold" },
+  resultText: { fontSize: 20, color: "green" },
   modalContent: {
-    height: 160,
+    height: 260,
     backgroundColor: "white",
     padding: 20,
     borderRadius: 10,

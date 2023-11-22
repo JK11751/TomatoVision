@@ -13,6 +13,7 @@ import firebase from "firebase/compat/app";
 import "firebase/compat/auth";
 import AuthLoading from "../screens/AuthLoading";
 import { FIREBASE_CONFIG } from "../core/config";
+//import Predict from "../screens/Predict";
 
 
 const Stack = createStackNavigator();
@@ -50,6 +51,13 @@ const Navigation = () => {
           component={SignUp}
           options={{ headerShown: false }}
         />
+        {/*
+         <Stack.Screen
+          name="Predict"
+          component={Predict}
+          options={{ headerShown: false }}
+        />
+    */}
         <Stack.Screen
           name="Login"
           component={Login}
