@@ -16,19 +16,18 @@ import { FontAwesome } from "@expo/vector-icons";
 import axios from "axios";
 
 axios.interceptors.request.use(
-  config => {
-    config.headers = {
-      'Content-Type': 'application/json',
-      Accept: 'application/json',
+  async config => {
+    let request = config;
+    request.headers = {
+      'Content-Type': 'multipart/form-data',
+      Accept: "multipart/form-data",
     };
-    config.url = configureUrl(config.url);
-    return config;
+    request.url = configureUrl(config.url);
+    return request;
   },
-  error => {
-    console.error('Request error:', error);
-    return Promise.reject(error);
-  }
+  error => error,
 );
+
 
 
 export const configureUrl = (url) => {
@@ -42,9 +41,9 @@ export const configureUrl = (url) => {
 const options = {
   mediaType: "photo",
   quality: 1,
-  width: 256,
-  height: 256,
-  includeBase64: true,
+  width: 224,
+  height: 224,
+  base64: true,
 };
 
 const ImageScreen = () => {
@@ -85,7 +84,8 @@ const ImageScreen = () => {
     let response = await ImagePicker.launchImageLibraryAsync(options);
     if (!response.canceled) {
        const uri = response.assets[0].uri;
-       const path = Platform.OS !== "ios" ? uri : "file://" + uri;
+       console.log("uri:", uri)
+       const path =  uri;
        getResult(path, response);
       console.log("path:", path)
       console.log("Response:", response)
@@ -119,8 +119,8 @@ const ImageScreen = () => {
 
    const params = {
       uri: path,
-      name: response.assets[0].fileName,
-      type: response.assets[0].type,
+      // name: response.assets[0].fileName,
+      // type: response.assets[0].type,
     };
   
     try {
@@ -136,7 +136,7 @@ const ImageScreen = () => {
       }
     } catch (error) {
       setLabel("Null");
-      console.log("Failed to connect to url api");
+      console.log("Failed to connect to url api",error);
       setResult("Null");
     }
     setLoading(false);
@@ -146,7 +146,7 @@ const ImageScreen = () => {
     return new Promise((resolve, reject) => { 
       var bodyFormData = new FormData();
       bodyFormData.append("file", params);
-      const url = "http://10.0.2.2:8000/predict";
+      const url = "http://ec2-13-49-69-50.eu-north-1.compute.amazonaws.com/predict";
       console.log(url);
       console.log("formdata", bodyFormData);
       axios
