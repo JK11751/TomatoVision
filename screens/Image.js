@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import Toast from "react-native-root-toast";
 import * as ImagePicker from "expo-image-picker";
-import * as ImageManipulator from "expo-image-manipulator";
 import {
   View,
   Text,
@@ -11,6 +10,7 @@ import {
   StyleSheet,
   ImageBackground,
   Modal,
+  //Platform,
 } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 import axios from "axios";
@@ -19,8 +19,8 @@ axios.interceptors.request.use(
   async (config) => {
     let request = config;
     request.headers = {
-      "Content-Type": "application/json",
-      Accept: "application/json",
+      "Content-Type": "multipart/form-data",
+      Accept: "multipart/form-data",
     };
     request.url = configureUrl(config.url);
     return request;
@@ -36,6 +36,14 @@ export const configureUrl = (url) => {
   return authUrl;
 };
 
+const options = {
+  mediaType: "photo",
+  quality: 1,
+  width: 224,
+  height: 224,
+  base64: true,
+};
+
 const ImageScreen = () => {
   const [result, setResult] = useState("");
   const [label, setLabel] = useState("");
@@ -48,42 +56,15 @@ const ImageScreen = () => {
     if (result.granted === false) {
       alert("Kindly allow this app to access your camera!");
     } else {
-      const response = await ImagePicker.launchCameraAsync({
-        mediaType: "photo",
-        allowsEditing: true,
-        aspect: [1, 1],
-        quality: 1,
-      });
-
+      const response = await ImagePicker.launchCameraAsync(options);
       if (!response.canceled) {
         const uri = response.assets[0].uri;
-        console.log("original url:", uri);
+       // console.log("uri:", uri);
+        //  const path = Platform.OS !== "ios" ? uri : "file://" + uri;
 
-        // Resize and crop the image to 256x256 pixels
-        const manipulatedImage = await ImageManipulator.manipulateAsync(
-          uri,
-          [
-            {
-              resize: {
-                width: 256,
-                height: 256,
-              },
-            },
-          ],
-          {
-            base64: true,
-            format: "jpeg", // You can specify the desired format here
-            compress: 1, // Quality of the image, 1 means no compression
-          }
-        );
-        // Use the manipulated image for further processing
-        const path =
-          Platform.OS !== "ios"
-            ? manipulatedImage.uri
-            : "file://" + manipulatedImage.uri;
-        getResult(path, manipulatedImage);
-        console.log("path:", path);
-        console.log("manimage:", manipulatedImage);
+        getResult(uri, response);
+        //  console.log("Response:", response)
+        // console.log("path:", path)
       } else {
         Toast.show("Camera operation cancelled or encountered an error:", {
           duration: Toast.durations.SHORT,
@@ -94,41 +75,14 @@ const ImageScreen = () => {
   };
 
   const pickImage = async () => {
-    let response = await ImagePicker.launchImageLibraryAsync({
-      mediaType: "photo",
-      allowsEditing: true,
-      aspect: [1, 1],
-      quality: 1,
-    });
+    let response = await ImagePicker.launchImageLibraryAsync(options);
     if (!response.canceled) {
       const uri = response.assets[0].uri;
-      console.log("original url:", uri);
-
-      // Resize and crop the image to 256x256 pixels
-      const manipulatedImage = await ImageManipulator.manipulateAsync(
-        uri,
-        [
-          {
-            resize: {
-              width: 256,
-              height: 256,
-            },
-          },
-        ],
-        {
-          base64: true,
-          format: "jpeg", // You can specify the desired format here
-          compress: 1, // Quality of the image, 1 means no compression
-        }
-      );
-      // Use the manipulated image for further processing
-      const path =
-        Platform.OS !== "ios"
-          ? manipulatedImage.uri
-          : "file://" + manipulatedImage.uri;
-      getResult(path, manipulatedImage);
-      console.log("path:", path);
-      console.log("manimage:", manipulatedImage);
+      //console.log("uri:", uri);
+      //  const path =  uri;
+      getResult(uri, response);
+      // console.log("path:", path)
+      // console.log("Response:", response)
     } else {
       Toast.show("Image Selection cancelled or encountered an error:", {
         duration: Toast.durations.SHORT,
@@ -139,27 +93,32 @@ const ImageScreen = () => {
 
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
-    setLoading(false);
+
+    // Clear image, result, and label when the modal is closed
+    //if (!isModalVisible) {
+    ///setLoading(false);
+    // clearImage();
+    //}
   };
 
-  const getResult = async (path, response) => {
+  const getResult = async (path) => {
     setLoading(true);
     setImage(path);
     toggleModal();
     setLabel("Predicting please wait...");
-    setResult("");
-    console.log("Predicting please wait...");
+    setResult("Predicting please wait...");
+    //console.log("Predicting please wait...");
     setResult("");
 
     const params = {
       uri: path,
-      name: response.assets[0].fileName,
-      type: response.assets[0].type,
+      type: "image/jpeg",
+      name: "image.jpg",
     };
 
     try {
       const res = await getPredication(params);
-      console.log("Result", res);
+      //console.log("Result", res);
       if (res?.data?.class) {
         setLabel(res.data.class);
         setResult(res.data.confidence);
@@ -170,31 +129,25 @@ const ImageScreen = () => {
       }
     } catch (error) {
       setLabel("Null");
-      console.log("Failed to connect to url api");
+      console.log("Failed to connect to url api", error);
       setResult("Null");
-    } finally {
-      setLoading(false);
     }
+    setLoading(false);
   };
-
+ 
   const getPredication = async (params) => {
-    return new Promise((resolve, reject) => {
-      var bodyFormData = new FormData();
-      bodyFormData.append("file", params);
-      const url = "http://10.0.2.2:8000/predict";
-      console.log(url);
-      console.log("formdata", bodyFormData);
-      axios
-        .post(url, bodyFormData)
-        .then((response) => {
-          resolve(response);
-        })
-
-        .catch((error) => {
-          setLabel("Failed to predict.");
-          reject("err", error);
-        });
-    });
+    let bodyFormData = new FormData();
+    bodyFormData.append("file", params);
+    const url =
+      "http://ec2-13-49-69-50.eu-north-1.compute.amazonaws.com/predict";
+     
+    try {
+      const response = await axios.post(url, bodyFormData);
+      // console.log("///////////////////////",response);
+      return response;
+    } catch (error) {
+      setLabel("Failed to predicting.");
+    }
   };
 
   return (
@@ -209,7 +162,7 @@ const ImageScreen = () => {
         <TouchableOpacity style={styles.button} onPress={pickImage}>
           <Text style={styles.detectButtonText}>Open Gallery</Text>
         </TouchableOpacity>
-        {image.length ? (
+        {image ? (
           <Image source={{ uri: image }} style={styles.image} />
         ) : (
           <Image
@@ -236,8 +189,17 @@ const ImageScreen = () => {
                 <View style={styles.iconContainer}>
                   <FontAwesome name="check" size={24} color="white" />
                 </View>
-                <Text style={styles.modalTitle}> {label} </Text>
-                <Text style={styles.modalTitle1}> {result} </Text>
+                <Text style={[styles.space, styles.labelText]}>
+                  {"Disease: \n"}
+                  <Text style={styles.resultText}>{label}</Text>
+                </Text>
+
+                <Text style={[styles.space, styles.labelText]}>
+                  {"Confidence: \n"}
+                  <Text style={styles.resultText}>
+                    {parseFloat(result).toFixed(2) + "%"}
+                  </Text>
+                </Text>
               </View>
               <TouchableOpacity
                 style={styles.closeButtonContainer}
@@ -297,8 +259,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "rgba(0, 0, 0, 0.5)",
   },
+  space: { marginVertical: 10, marginHorizontal: 10 },
+  labelText: { color: "black", fontSize: 30, fontWeight: "bold" },
+  resultText: { fontSize: 20, color: "green" },
   modalContent: {
-    height: 160,
+    height: 260,
     backgroundColor: "white",
     padding: 20,
     borderRadius: 10,

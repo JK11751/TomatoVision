@@ -45,11 +45,15 @@ const Navigation = () => {
           options={{ headerShown: false }}
         />
         
+        
         <Stack.Screen
           name="SignUp"
           component={SignUp}
           options={{ headerShown: false }}
         />
+      
+         
+    
         <Stack.Screen
           name="Login"
           component={Login}
