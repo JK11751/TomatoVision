@@ -13,7 +13,6 @@ import firebase from "firebase/compat/app";
 import "firebase/compat/auth";
 import AuthLoading from "../screens/AuthLoading";
 import { FIREBASE_CONFIG } from "../core/config";
-//import Predict from "../screens/Predict";
 
 
 const Stack = createStackNavigator();

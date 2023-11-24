@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import Toast from "react-native-root-toast";
 import * as ImagePicker from "expo-image-picker";
-//import * as ImageManipulator from "expo-image-manipulator";
 import {
   View,
   Text,
@@ -11,24 +10,23 @@ import {
   StyleSheet,
   ImageBackground,
   Modal,
+  //Platform,
 } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 import axios from "axios";
 
 axios.interceptors.request.use(
-  async config => {
+  async (config) => {
     let request = config;
     request.headers = {
-      'Content-Type': 'multipart/form-data',
+      "Content-Type": "multipart/form-data",
       Accept: "multipart/form-data",
     };
     request.url = configureUrl(config.url);
     return request;
   },
-  error => error,
+  (error) => error
 );
-
-
 
 export const configureUrl = (url) => {
   let authUrl = url;
@@ -53,24 +51,20 @@ const ImageScreen = () => {
   const [isLoading, setLoading] = useState(false);
   const [isModalVisible, setModalVisible] = useState(false);
 
-  
-
   const openCamera = async () => {
     const result = await ImagePicker.requestCameraPermissionsAsync();
     if (result.granted === false) {
       alert("Kindly allow this app to access your camera!");
     } else {
-      const response = await ImagePicker.launchCameraAsync(options)
+      const response = await ImagePicker.launchCameraAsync(options);
       if (!response.canceled) {
-         const uri = response.assets[0].uri;
-         console.log("uri:", uri)
-         const path = Platform.OS !== "ios" ? uri : "file://" + uri;
-         
-        getResult(path, response);
-         console.log("Response:", response)
-        console.log("path:", path)
-       
-       
+        const uri = response.assets[0].uri;
+       // console.log("uri:", uri);
+        //  const path = Platform.OS !== "ios" ? uri : "file://" + uri;
+
+        getResult(uri, response);
+        //  console.log("Response:", response)
+        // console.log("path:", path)
       } else {
         Toast.show("Camera operation cancelled or encountered an error:", {
           duration: Toast.durations.SHORT,
@@ -83,13 +77,12 @@ const ImageScreen = () => {
   const pickImage = async () => {
     let response = await ImagePicker.launchImageLibraryAsync(options);
     if (!response.canceled) {
-       const uri = response.assets[0].uri;
-       console.log("uri:", uri)
-       const path =  uri;
-       getResult(path, response);
-      console.log("path:", path)
-      console.log("Response:", response)
-       
+      const uri = response.assets[0].uri;
+      //console.log("uri:", uri);
+      //  const path =  uri;
+      getResult(uri, response);
+      // console.log("path:", path)
+      // console.log("Response:", response)
     } else {
       Toast.show("Image Selection cancelled or encountered an error:", {
         duration: Toast.durations.SHORT,
@@ -103,29 +96,29 @@ const ImageScreen = () => {
 
     // Clear image, result, and label when the modal is closed
     //if (!isModalVisible) {
-      ///setLoading(false);
-     // clearImage();
+    ///setLoading(false);
+    // clearImage();
     //}
   };
 
-  const getResult = async (path, response) => {
+  const getResult = async (path) => {
     setLoading(true);
     setImage(path);
     toggleModal();
     setLabel("Predicting please wait...");
-    setResult("");
-    console.log("Predicting please wait...");
+    setResult("Predicting please wait...");
+    //console.log("Predicting please wait...");
     setResult("");
 
-   const params = {
+    const params = {
       uri: path,
-      // name: response.assets[0].fileName,
-      // type: response.assets[0].type,
+      type: "image/jpeg",
+      name: "image.jpg",
     };
-  
+
     try {
       const res = await getPredication(params);
-      console.log("Result", res);
+      //console.log("Result", res);
       if (res?.data?.class) {
         setLabel(res.data.class);
         setResult(res.data.confidence);
@@ -136,30 +129,25 @@ const ImageScreen = () => {
       }
     } catch (error) {
       setLabel("Null");
-      console.log("Failed to connect to url api",error);
+      console.log("Failed to connect to url api", error);
       setResult("Null");
     }
     setLoading(false);
   };
-
+ 
   const getPredication = async (params) => {
-    return new Promise((resolve, reject) => { 
-      var bodyFormData = new FormData();
-      bodyFormData.append("file", params);
-      const url = "http://ec2-13-49-69-50.eu-north-1.compute.amazonaws.com/predict";
-      console.log(url);
-      console.log("formdata", bodyFormData);
-      axios
-        .post(url, bodyFormData)
-        .then((response) => {
-          resolve(response);
-        })
-
-        .catch((error) => {
-          setLabel("Failed to predict.");
-          reject("err", error);
-        });
-    });
+    let bodyFormData = new FormData();
+    bodyFormData.append("file", params);
+    const url =
+      "http://ec2-13-49-69-50.eu-north-1.compute.amazonaws.com/predict";
+     
+    try {
+      const response = await axios.post(url, bodyFormData);
+      // console.log("///////////////////////",response);
+      return response;
+    } catch (error) {
+      setLabel("Failed to predicting.");
+    }
   };
 
   return (
@@ -174,7 +162,7 @@ const ImageScreen = () => {
         <TouchableOpacity style={styles.button} onPress={pickImage}>
           <Text style={styles.detectButtonText}>Open Gallery</Text>
         </TouchableOpacity>
-        {image? (
+        {image ? (
           <Image source={{ uri: image }} style={styles.image} />
         ) : (
           <Image
@@ -205,15 +193,13 @@ const ImageScreen = () => {
                   {"Disease: \n"}
                   <Text style={styles.resultText}>{label}</Text>
                 </Text>
-                
+
                 <Text style={[styles.space, styles.labelText]}>
                   {"Confidence: \n"}
                   <Text style={styles.resultText}>
                     {parseFloat(result).toFixed(2) + "%"}
                   </Text>
-          
                 </Text>
-                
               </View>
               <TouchableOpacity
                 style={styles.closeButtonContainer}

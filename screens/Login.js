@@ -20,7 +20,7 @@ import { passwordValidator } from "../helpers/passwordValidator";
 import { loginUser } from "../api/auth-api";
 
 const screenWidth = Dimensions.get('window').width;
-const inputFieldWidth = screenWidth * 0.8;
+const inputFieldWidth = screenWidth * 0.4;
 
 const Login = () => {
   const navigation = useNavigation();
