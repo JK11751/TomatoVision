@@ -7,7 +7,7 @@ const data = [
     },
     {
       id: 2,
-      image: require('../assets/images/swollen.gif'),
+      image: require('../assets/images/agriculture.png'),
       title: 'Be Happy',
       text: 'Minimize losses and maximize on your harvest',
     },

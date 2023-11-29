@@ -59,7 +59,7 @@ const ImageScreen = () => {
       const response = await ImagePicker.launchCameraAsync(options);
       if (!response.canceled) {
         const uri = response.assets[0].uri;
-       // console.log("uri:", uri);
+        // console.log("uri:", uri);
         //  const path = Platform.OS !== "ios" ? uri : "file://" + uri;
 
         getResult(uri, response);
@@ -102,23 +102,31 @@ const ImageScreen = () => {
   };
 
   const getResult = async (path) => {
+    if (!path) {
+      // Show toast message if no image is selected
+      Toast.show("Please select an image before detecting.", {
+        duration: Toast.durations.SHORT,
+        position: Toast.positions.TOP,
+      });
+      return;
+    }
+  
     setLoading(true);
     setImage(path);
     toggleModal();
     setLabel("Predicting please wait...");
     setResult("Predicting please wait...");
-    //console.log("Predicting please wait...");
     setResult("");
-
+  
     const params = {
       uri: path,
       type: "image/jpeg",
       name: "image.jpg",
     };
-
+  
     try {
       const res = await getPredication(params);
-      //console.log("Result", res);
+  
       if (res?.data?.class) {
         setLabel(res.data.class);
         setResult(res.data.confidence);
@@ -131,16 +139,19 @@ const ImageScreen = () => {
       setLabel("Null");
       console.log("Failed to connect to url api", error);
       setResult("Null");
+    } finally {
+      // Clear the image state once the prediction ends
+      setLoading(false);
+      setImage(""); // Set image state to empty string or your default image path
     }
-    setLoading(false);
   };
- 
+  
+
   const getPredication = async (params) => {
     let bodyFormData = new FormData();
     bodyFormData.append("file", params);
-    const url =
-      "http://ec2-13-49-69-50.eu-north-1.compute.amazonaws.com/predict";
-     
+    const url = "https://danmuiruri-tomatovision.hf.space/predict";
+
     try {
       const response = await axios.post(url, bodyFormData);
       // console.log("///////////////////////",response);
@@ -197,7 +208,7 @@ const ImageScreen = () => {
                 <Text style={[styles.space, styles.labelText]}>
                   {"Confidence: \n"}
                   <Text style={styles.resultText}>
-                    {parseFloat(result).toFixed(2) + "%"}
+                    {parseInt(parseFloat(result * 100).toFixed(0)) + "%"}
                   </Text>
                 </Text>
               </View>
@@ -232,6 +243,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#3498db",
     width: 250,
     padding: 10,
+    borderRadius:50,
     marginBottom: 30,
     alignItems: "center",
   },
@@ -246,7 +258,7 @@ const styles = StyleSheet.create({
     marginTop: 6,
     padding: 10,
     width: 250,
-    borderRadius: 5,
+    borderRadius:50,
   },
   detectButtonText: {
     color: "white",

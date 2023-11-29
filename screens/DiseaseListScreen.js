@@ -10,17 +10,51 @@ import {
 } from 'react-native';
 
 const DATA = [
-  { id: 1, name: 'Early blight', description: 'Spot of come to ever hand as lady meet on'},
+  {
+    id: 1,
+    name: 'Tomato Early Blight',
+    description: 'This is a fungal disease that causes dark spots with rings on the lower leaves, stems, and fruits. To manage it, you should:\n\n' +
+      'Remove and dispose of infected leaves and fruits as soon as you notice them.\n' +
+      'Apply a fungicide spray every 7 to 10 days, starting from when the first symptoms appear or when the weather is favorable for the disease. You can use copper or sulfur-based fungicides, or biofungicides such as Serenade1.\n' +
+      'Mulch the soil around the plants to prevent spores from splashing onto the foliage.\n' +
+      'Water the plants at the base and avoid wetting the leaves.\n' +
+      'Rotate your tomato crops every two years and avoid planting them near other nightshade plants, such as potatoes, peppers, and eggplants.'
+  },
   {
     id: 2,
     name: 'Late blight',
-    description: 'Spot of come to ever hand as lady meet on'
-   
+    description: 'This is a fungal disease that causes brown or black spots on the leaves, stems, and fruits, and a white fuzzy growth on the underside of the leaves. To manage it, you should:\n\n' +
+      'Remove and destroy infected plants as soon as you notice them. Do not compost them, as the spores can survive and infect other plants.\n' +
+      'Apply a fungicide spray every 5 to 7 days, starting from when the first symptoms appear or when the weather is cool and humid. You can use copper or chlorothalonil-based fungicides, or biofungicides such as Regalia2.\n' +
+      'Avoid overhead watering and provide good air circulation around the plants.\n' +
+      'Plant resistant varieties, such as Mountain Magic, Defiant, and Plum Regal3.'
   },
-  { id: 3, name: 'Septoria leaf spot', description: 'Spot of come to ever hand as lady meet on'},
-  { id: 4, name: 'Tomato Yellow Leaf Curl Virus', description: 'Spot of come to ever hand as lady meet on' },
-  { id: 5, name: 'Healthy', description: 'Spot of come to ever hand as lady meet on'}
+  {
+    id: 3,
+    name: 'Tomato Septoria Leaf Spot',
+    description: 'This is a fungal disease that causes small, brown, round spots on the leaves, especially on the lower ones. To manage it, you should:\n\n' +
+      'Prune the lower leaves of the plants to increase air flow and reduce humidity.\n' +
+      'Apply a fungicide spray every 7 to 10 days, starting from when the first symptoms appear or when the weather is wet and warm. You can use copper, sulfur, or mancozeb-based fungicides, or biofungicides such as Serenade4.\n' +
+      'Water the plants at the base and avoid wetting the leaves.\n' +
+      'Rotate your tomato crops every three years and remove any weeds or volunteer tomato plants that may harbor the disease.'
+  },
+  {
+    id: 4,
+    name: 'Tomato Yellow Leaf Curl Virus',
+    description: 'This is a viral disease that causes the leaves to curl, turn yellow, and become distorted. It is transmitted by whiteflies, which are tiny insects that feed on the sap of the plants. To manage it, you should:\n\n' +
+      'Monitor your plants regularly for signs of whiteflies and virus infection. Look for whiteflies on the underside of the leaves and yellowing and curling of the leaves.\n' +
+      'Use yellow sticky traps to catch and monitor whiteflies. Place them near the plants, but not touching them.\n' +
+      'Apply an insecticide spray every 7 to 10 days, starting from when you see whiteflies or virus symptoms. You can use neem oil, pyrethrin, or insecticidal soap5.\n' +
+      'Cover your plants with a fine mesh netting or row cover to prevent whiteflies from reaching them. Make sure the netting does not touch the plants, as whiteflies can feed through it.\n' +
+      'Plant resistant varieties, such as Tygress, Shanty, and Bella Rosa.'
+  },
+  {
+    id: 5,
+    name: 'Healthy',
+    description: 'Spot of come to ever hand as lady meet on'
+  },
 ];
+
 
 const DiseaseListScreen = () => {
   const navigation = useNavigation();

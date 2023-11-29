@@ -173,7 +173,7 @@ const styles = StyleSheet.create({
   },
   rect3: {
     width: 326,
-    height: 202,
+    height: 250,
     backgroundColor: 'white',
     borderRadius: 12,
     marginTop: 30,

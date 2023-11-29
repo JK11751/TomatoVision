@@ -390,10 +390,11 @@ const styles = StyleSheet.create({
   modalButton: {
     fontSize: 16,
     color: "green",
-    marginBottom: 20,
+    marginTop: 20,
   },
   modalButtonRed: {
     fontSize: 16,
+    marginBottom:20,
     color: "red",
   },
 });

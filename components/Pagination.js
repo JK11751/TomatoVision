@@ -44,6 +44,7 @@ export default Pagination;
 const styles = StyleSheet.create({
   paginationContainer: {
     flexDirection: 'row',
+    backgroundColor:'transparent',
     height: 40,
     justifyContent: 'center',
     alignItems: 'center',

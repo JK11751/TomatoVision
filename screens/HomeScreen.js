@@ -123,11 +123,6 @@ const Home = () => {
               resizeMode="contain"
               style={styles.image2}
             ></Image>
-            <Image
-              source={require("../assets/tomato_PNG12588.png")}
-              resizeMode="contain"
-              style={styles.image10}
-            ></Image>
           </View>
         </View>
       </View>
@@ -151,7 +146,7 @@ const styles = StyleSheet.create({
     position: "absolute",
   },
   rect: {
-    top: 90,
+    top: 150,
     width: 278,
     height: 513,
     position: "absolute",
