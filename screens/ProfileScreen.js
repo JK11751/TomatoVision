@@ -4,7 +4,8 @@ import firebase from "firebase/compat/app";
 import { useNavigation } from "@react-navigation/native";
 import "firebase/compat/auth";
 import { logoutUser, deleteUserAccount } from "../api/auth-api";
-
+import { Dimensions } from "react-native";
+const {width} = Dimensions.get('window');
 const ProfileScreen = () => {
   const navigation = useNavigation();
   const [name, setName] = useState("");
@@ -197,7 +198,7 @@ const styles = StyleSheet.create({
     marginLeft: 183,
   },
   rect5: {
-    width: 247,
+    width: width/1.3,
     height: 78,
     borderWidth: 1,
     borderColor: 'green',
