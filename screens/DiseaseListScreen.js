@@ -13,57 +13,68 @@ const DATA = [
   {
     id: 1,
     name: 'Tomato Leaf Bacterial spot',
-    description: 'This disease is caused by bacteria that infect the leaves, stems, and fruits of tomato plants. It causes small, dark, water-soaked spots that may coalesce into larger lesions. The infected tissue may fall out, leaving holes in the leaves or fruits. To manage this disease, use pathogen-free seeds and transplants, avoid overhead irrigation, prune lower leaves, and apply copper-based fungicides as a preventive measure.'
+    description: 'This disease is caused by bacteria that infect the leaves, stems, and fruits of tomato plants. It causes small, dark, water-soaked spots that may coalesce into larger lesions. The infected tissue may fall out, leaving holes in the leaves or fruits. To manage this disease, use pathogen-free seeds and transplants, avoid overhead irrigation, prune lower leaves, and apply copper-based fungicides as a preventive measure.',
+    image: require('../assets/images/bacterialspot.jpg')
   },
   {
     id: 2,
     name: 'Tomato Leaf Early blight',
-    description: 'This disease is caused by a fungus that attacks the lower leaves, stems, and fruits of tomato plants. It causes brown spots with concentric rings that resemble a target. The infected leaves may turn yellow and drop off, exposing the fruits to sunscald. To manage this disease, remove and destroy infected plant debris, rotate crops, mulch the soil, water at the base of the plants, and apply fungicides as a preventive or curative treatment.'
+    description: 'This disease is caused by a fungus that attacks the lower leaves, stems, and fruits of tomato plants. It causes brown spots with concentric rings that resemble a target. The infected leaves may turn yellow and drop off, exposing the fruits to sunscald. To manage this disease, remove and destroy infected plant debris, rotate crops, mulch the soil, water at the base of the plants, and apply fungicides as a preventive or curative treatment.',
+    image: require('../assets/images/Earlyblight.jpg')
   },
   {
     id: 3,
     name: 'Tomato Leaf Healthy',
-    description: 'This is not a disease, but a desirable condition for tomato plants. Healthy tomato plants have green, vigorous foliage, strong stems, and abundant fruits. To maintain healthy tomato plants, provide adequate sunlight, water, nutrients, and air circulation, and protect them from pests and diseases.'
+    description: 'This is not a disease, but a desirable condition for tomato plants. Healthy tomato plants have green, vigorous foliage, strong stems, and abundant fruits. To maintain healthy tomato plants, provide adequate sunlight, water, nutrients, and air circulation, and protect them from pests and diseases.',
+    image: require('../assets/images/LeafHealthy.jpg')
   },
   {
     id: 4,
     name: 'Tomato Leaf Late blight',
-    description: 'This disease is caused by a fungus-like organism that infects the leaves, stems, and fruits of tomato plants. It causes gray, water-soaked lesions that turn brown and necrotic. The infected tissue may be covered with white, fuzzy growth. The disease can spread rapidly and kill the entire plant. To manage this disease, use resistant varieties, avoid planting tomatoes near potatoes, remove and destroy infected plants, and apply fungicides as a preventive or curative treatment.'
+    description: 'This disease is caused by a fungus-like organism that infects the leaves, stems, and fruits of tomato plants. It causes gray, water-soaked lesions that turn brown and necrotic. The infected tissue may be covered with white, fuzzy growth. The disease can spread rapidly and kill the entire plant. To manage this disease, use resistant varieties, avoid planting tomatoes near potatoes, remove and destroy infected plants, and apply fungicides as a preventive or curative treatment.',
+    image: require('../assets/images/Lateblight.jpg')
   },
   {
     id: 5,
     name: 'Tomato Leaf mold',
-    description: 'This disease is caused by a fungus that infects the upper surface of the leaves of tomato plants. It causes yellow or green spots that turn brown and moldy. The infected leaves may curl and drop off. The disease is favored by high humidity and low light. To manage this disease, increase air circulation, prune lower leaves, and apply fungicides as a preventive or curative treatment.'
+    description: 'This disease is caused by a fungus that infects the upper surface of the leaves of tomato plants. It causes yellow or green spots that turn brown and moldy. The infected leaves may curl and drop off. The disease is favored by high humidity and low light. To manage this disease, increase air circulation, prune lower leaves, and apply fungicides as a preventive or curative treatment.',
+    image: require('../assets/images/Leafmold.jpg')
   },
   {
     id: 6,
     name: 'Not disease',
-    description: 'This is a default class for images other than tomato leaf diseases.'
+    description: 'This is a default class for images other than tomato leaf diseases.',
+    image: require('../assets/images/agriculture.png')
   },
   {
     id: 7,
     name: 'Tomato Septoria leaf spot',
-    description: 'This disease is caused by a fungus that infects the lower leaves of tomato plants. It causes small, circular, brown spots with dark margins and light centers. The infected leaves may turn yellow and drop off, reducing the photosynthesis and yield of the plant. To manage this disease, remove and destroy infected plant debris, rotate crops, mulch the soil, water at the base of the plants, and apply fungicides as a preventive or curative treatment.'
+    description: 'This disease is caused by a fungus that infects the lower leaves of tomato plants. It causes small, circular, brown spots with dark margins and light centers. The infected leaves may turn yellow and drop off, reducing the photosynthesis and yield of the plant. To manage this disease, remove and destroy infected plant debris, rotate crops, mulch the soil, water at the base of the plants, and apply fungicides as a preventive or curative treatment.',
+    image: require('../assets/images/Septorialeaf.jpg')
   },
   {
     id: 8,
     name: 'Tomato Leaf Spider mites',
-    description: 'These are not a disease, but a type of pest that feeds on the sap of tomato plants. They cause tiny, yellow or white speckles on the leaves, which may turn brown and dry. The infested leaves may also have fine webbing on the underside. Spider mites can reduce the vigor and yield of the plant. To manage spider mites, use resistant varieties, avoid excessive nitrogen fertilization, spray the plants with water or insecticidal soap, and release predatory mites or other natural enemies.'
+    description: 'These are not a disease, but a type of pest that feeds on the sap of tomato plants. They cause tiny, yellow or white speckles on the leaves, which may turn brown and dry. The infested leaves may also have fine webbing on the underside. Spider mites can reduce the vigor and yield of the plant. To manage spider mites, use resistant varieties, avoid excessive nitrogen fertilization, spray the plants with water or insecticidal soap, and release predatory mites or other natural enemies.',
+    image: require('../assets/images/LeafSpidermites.jpg')
   },
   {
     id: 9,
     name: 'Tomato Leaf Target spot',
-    description: 'This disease is caused by a fungus that infects the leaves and fruits of tomato plants. It causes brown spots with concentric rings that resemble a target. The infected leaves may turn yellow and drop off, and the infected fruits may crack and rot. The disease is favored by warm and wet conditions. To manage this disease, use resistant varieties, remove and destroy infected plant debris, rotate crops, mulch the soil, water at the base of the plants, and apply fungicides as a preventive or curative treatment.'
+    description: 'This disease is caused by a fungus that infects the leaves and fruits of tomato plants. It causes brown spots with concentric rings that resemble a target. The infected leaves may turn yellow and drop off, and the infected fruits may crack and rot. The disease is favored by warm and wet conditions. To manage this disease, use resistant varieties, remove and destroy infected plant debris, rotate crops, mulch the soil, water at the base of the plants, and apply fungicides as a preventive or curative treatment.',
+    image: require('../assets/images/targetspot.jpg')
   },
   {
     id: 10,
     name: 'Tomato yellow leaf curl virus',
-    description: 'This disease is caused by a virus that is transmitted by whiteflies. It causes the leaves of tomato plants to curl upward and turn yellow, and the fruits to be small and deformed. The infected plants may be stunted and unproductive. The disease is difficult to control once it occurs. To manage this disease, use resistant varieties, control whiteflies, remove and destroy infected plants, and cover the plants with insect-proof nets.'
+    description: 'This disease is caused by a virus that is transmitted by whiteflies. It causes the leaves of tomato plants to curl upward and turn yellow, and the fruits to be small and deformed. The infected plants may be stunted and unproductive. The disease is difficult to control once it occurs. To manage this disease, use resistant varieties, control whiteflies, remove and destroy infected plants, and cover the plants with insect-proof nets.',
+    image: require('../assets/images/yellowleafcurlvirus.jpg')
   },
   {
     id: 11,
     name: 'Tomato mosaic virus',
-    description: 'This disease is caused by a virus that is transmitted by contact with infected plants, seeds, or tools. It causes the leaves of tomato plants to be mottled with yellow and green patches, and the fruits to be distorted and discolored. The infected plants may be stunted and unproductive. The disease is difficult to control once it occurs. To manage this disease, use virus-free seeds and transplants, sanitize tools, remove and destroy infected plants, and avoid smoking near the plants.'
+    description: 'This disease is caused by a virus that is transmitted by contact with infected plants, seeds, or tools. It causes the leaves of tomato plants to be mottled with yellow and green patches, and the fruits to be distorted and discolored. The infected plants may be stunted and unproductive. The disease is difficult to control once it occurs. To manage this disease, use virus-free seeds and transplants, sanitize tools, remove and destroy infected plants, and avoid smoking near the plants.',
+    image: require('../assets/images/mosaicvirus.jpg')
   }
 ];
 
@@ -79,15 +90,15 @@ const DiseaseListScreen = () => {
         }}
       >
         <View style={styles.rect6Row}>
-          {/*
+          
           <View style={styles.rect6}>
             <Image
-              source={require('../assets/images/potato.png')}
+              source={item.image}
               resizeMode='cover'
               style={styles.plantImage}
             ></Image>
           </View>
-      */}
+      
           <View style={styles.potatoEralyBrightColumn}>
           <Text style={styles.potatoEralyBright}>{item.name}</Text>
             <Text style={styles.mangoAppleOrange}>{item.species}</Text>
@@ -209,7 +220,7 @@ const styles = StyleSheet.create({
   image4: {
     width: 29,
     height: 58,
-    marginLeft: 110,
+    marginLeft: 17,
     marginTop: 10
   },
   rect6Row: {
