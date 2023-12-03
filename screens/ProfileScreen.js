@@ -100,6 +100,7 @@ const ProfileScreen = () => {
               ></Image>
             </View>
           </TouchableOpacity>
+          {/*
           <TouchableOpacity style={styles.rect3}>
             <View style={styles.image4Row}>
               <Image
@@ -115,6 +116,7 @@ const ProfileScreen = () => {
               ></Image>
             </View>
           </TouchableOpacity>
+  */}
           <TouchableOpacity style={styles.rect4}   onPress={confirmDeleteAccount}>
             <View style={styles.image3Row}>
               <Image
@@ -245,7 +247,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderRadius: 97,
     flexDirection: 'row',
-    marginTop: 63,
+    marginTop: 83,
     marginLeft: 36,
     shadowColor: 'rgba(0,0,0,1)',
     shadowOffset: {
@@ -329,7 +331,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderRadius: 100,
     flexDirection: 'row',
-    marginTop: 26,
+    marginTop: 100,
     marginLeft: 36,
     shadowColor: 'rgba(0,0,0,1)',
     shadowOffset: {
@@ -394,7 +396,7 @@ const styles = StyleSheet.create({
   },
   modalButtonRed: {
     fontSize: 16,
-    marginBottom:20,
+    marginBottom:10,
     color: "red",
   },
 });

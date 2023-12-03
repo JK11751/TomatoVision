@@ -12,47 +12,59 @@ import {
 const DATA = [
   {
     id: 1,
-    name: 'Tomato Early Blight',
-    description: 'This is a fungal disease that causes dark spots with rings on the lower leaves, stems, and fruits. To manage it, you should:\n\n' +
-      'Remove and dispose of infected leaves and fruits as soon as you notice them.\n' +
-      'Apply a fungicide spray every 7 to 10 days, starting from when the first symptoms appear or when the weather is favorable for the disease. You can use copper or sulfur-based fungicides, or biofungicides such as Serenade1.\n' +
-      'Mulch the soil around the plants to prevent spores from splashing onto the foliage.\n' +
-      'Water the plants at the base and avoid wetting the leaves.\n' +
-      'Rotate your tomato crops every two years and avoid planting them near other nightshade plants, such as potatoes, peppers, and eggplants.'
+    name: 'Tomato Leaf Bacterial spot',
+    description: 'This disease is caused by bacteria that infect the leaves, stems, and fruits of tomato plants. It causes small, dark, water-soaked spots that may coalesce into larger lesions. The infected tissue may fall out, leaving holes in the leaves or fruits. To manage this disease, use pathogen-free seeds and transplants, avoid overhead irrigation, prune lower leaves, and apply copper-based fungicides as a preventive measure.'
   },
   {
     id: 2,
-    name: 'Late blight',
-    description: 'This is a fungal disease that causes brown or black spots on the leaves, stems, and fruits, and a white fuzzy growth on the underside of the leaves. To manage it, you should:\n\n' +
-      'Remove and destroy infected plants as soon as you notice them. Do not compost them, as the spores can survive and infect other plants.\n' +
-      'Apply a fungicide spray every 5 to 7 days, starting from when the first symptoms appear or when the weather is cool and humid. You can use copper or chlorothalonil-based fungicides, or biofungicides such as Regalia2.\n' +
-      'Avoid overhead watering and provide good air circulation around the plants.\n' +
-      'Plant resistant varieties, such as Mountain Magic, Defiant, and Plum Regal3.'
+    name: 'Tomato Leaf Early blight',
+    description: 'This disease is caused by a fungus that attacks the lower leaves, stems, and fruits of tomato plants. It causes brown spots with concentric rings that resemble a target. The infected leaves may turn yellow and drop off, exposing the fruits to sunscald. To manage this disease, remove and destroy infected plant debris, rotate crops, mulch the soil, water at the base of the plants, and apply fungicides as a preventive or curative treatment.'
   },
   {
     id: 3,
-    name: 'Tomato Septoria Leaf Spot',
-    description: 'This is a fungal disease that causes small, brown, round spots on the leaves, especially on the lower ones. To manage it, you should:\n\n' +
-      'Prune the lower leaves of the plants to increase air flow and reduce humidity.\n' +
-      'Apply a fungicide spray every 7 to 10 days, starting from when the first symptoms appear or when the weather is wet and warm. You can use copper, sulfur, or mancozeb-based fungicides, or biofungicides such as Serenade4.\n' +
-      'Water the plants at the base and avoid wetting the leaves.\n' +
-      'Rotate your tomato crops every three years and remove any weeds or volunteer tomato plants that may harbor the disease.'
+    name: 'Tomato Leaf Healthy',
+    description: 'This is not a disease, but a desirable condition for tomato plants. Healthy tomato plants have green, vigorous foliage, strong stems, and abundant fruits. To maintain healthy tomato plants, provide adequate sunlight, water, nutrients, and air circulation, and protect them from pests and diseases.'
   },
   {
     id: 4,
-    name: 'Tomato Yellow Leaf Curl Virus',
-    description: 'This is a viral disease that causes the leaves to curl, turn yellow, and become distorted. It is transmitted by whiteflies, which are tiny insects that feed on the sap of the plants. To manage it, you should:\n\n' +
-      'Monitor your plants regularly for signs of whiteflies and virus infection. Look for whiteflies on the underside of the leaves and yellowing and curling of the leaves.\n' +
-      'Use yellow sticky traps to catch and monitor whiteflies. Place them near the plants, but not touching them.\n' +
-      'Apply an insecticide spray every 7 to 10 days, starting from when you see whiteflies or virus symptoms. You can use neem oil, pyrethrin, or insecticidal soap5.\n' +
-      'Cover your plants with a fine mesh netting or row cover to prevent whiteflies from reaching them. Make sure the netting does not touch the plants, as whiteflies can feed through it.\n' +
-      'Plant resistant varieties, such as Tygress, Shanty, and Bella Rosa.'
+    name: 'Tomato Leaf Late blight',
+    description: 'This disease is caused by a fungus-like organism that infects the leaves, stems, and fruits of tomato plants. It causes gray, water-soaked lesions that turn brown and necrotic. The infected tissue may be covered with white, fuzzy growth. The disease can spread rapidly and kill the entire plant. To manage this disease, use resistant varieties, avoid planting tomatoes near potatoes, remove and destroy infected plants, and apply fungicides as a preventive or curative treatment.'
   },
   {
     id: 5,
-    name: 'Healthy',
-    description: 'Spot of come to ever hand as lady meet on'
+    name: 'Tomato Leaf mold',
+    description: 'This disease is caused by a fungus that infects the upper surface of the leaves of tomato plants. It causes yellow or green spots that turn brown and moldy. The infected leaves may curl and drop off. The disease is favored by high humidity and low light. To manage this disease, increase air circulation, prune lower leaves, and apply fungicides as a preventive or curative treatment.'
   },
+  {
+    id: 6,
+    name: 'Not disease',
+    description: 'This is a default class for images other than tomato leaf diseases.'
+  },
+  {
+    id: 7,
+    name: 'Tomato Septoria leaf spot',
+    description: 'This disease is caused by a fungus that infects the lower leaves of tomato plants. It causes small, circular, brown spots with dark margins and light centers. The infected leaves may turn yellow and drop off, reducing the photosynthesis and yield of the plant. To manage this disease, remove and destroy infected plant debris, rotate crops, mulch the soil, water at the base of the plants, and apply fungicides as a preventive or curative treatment.'
+  },
+  {
+    id: 8,
+    name: 'Tomato Leaf Spider mites',
+    description: 'These are not a disease, but a type of pest that feeds on the sap of tomato plants. They cause tiny, yellow or white speckles on the leaves, which may turn brown and dry. The infested leaves may also have fine webbing on the underside. Spider mites can reduce the vigor and yield of the plant. To manage spider mites, use resistant varieties, avoid excessive nitrogen fertilization, spray the plants with water or insecticidal soap, and release predatory mites or other natural enemies.'
+  },
+  {
+    id: 9,
+    name: 'Tomato Leaf Target spot',
+    description: 'This disease is caused by a fungus that infects the leaves and fruits of tomato plants. It causes brown spots with concentric rings that resemble a target. The infected leaves may turn yellow and drop off, and the infected fruits may crack and rot. The disease is favored by warm and wet conditions. To manage this disease, use resistant varieties, remove and destroy infected plant debris, rotate crops, mulch the soil, water at the base of the plants, and apply fungicides as a preventive or curative treatment.'
+  },
+  {
+    id: 10,
+    name: 'Tomato yellow leaf curl virus',
+    description: 'This disease is caused by a virus that is transmitted by whiteflies. It causes the leaves of tomato plants to curl upward and turn yellow, and the fruits to be small and deformed. The infected plants may be stunted and unproductive. The disease is difficult to control once it occurs. To manage this disease, use resistant varieties, control whiteflies, remove and destroy infected plants, and cover the plants with insect-proof nets.'
+  },
+  {
+    id: 11,
+    name: 'Tomato mosaic virus',
+    description: 'This disease is caused by a virus that is transmitted by contact with infected plants, seeds, or tools. It causes the leaves of tomato plants to be mottled with yellow and green patches, and the fruits to be distorted and discolored. The infected plants may be stunted and unproductive. The disease is difficult to control once it occurs. To manage this disease, use virus-free seeds and transplants, sanitize tools, remove and destroy infected plants, and avoid smoking near the plants.'
+  }
 ];
 
 
@@ -67,6 +79,7 @@ const DiseaseListScreen = () => {
         }}
       >
         <View style={styles.rect6Row}>
+          {/*
           <View style={styles.rect6}>
             <Image
               source={require('../assets/images/potato.png')}
@@ -74,6 +87,7 @@ const DiseaseListScreen = () => {
               style={styles.plantImage}
             ></Image>
           </View>
+      */}
           <View style={styles.potatoEralyBrightColumn}>
           <Text style={styles.potatoEralyBright}>{item.name}</Text>
             <Text style={styles.mangoAppleOrange}>{item.species}</Text>
@@ -100,7 +114,7 @@ const DiseaseListScreen = () => {
           }}
           renderItem={renderPlantDisease}
           keyExtractor={(item) => item.id.toString()}
-          showsVerticalScrollIndicator={true}
+          showsVerticalScrollIndicator={false}
         />
       </View>
       <View style={styles.image3Stack}>
@@ -171,18 +185,17 @@ const styles = StyleSheet.create({
     height: 76
   },
   potatoEralyBright: {
-    fontFamily: '',
     color: '#195F57',
+    fontSize:20,
     bottom: 7
   },
   mangoAppleOrange: {
-    fontFamily: '',
     color: '#195F57',
+    fontSize:18,
     bottom: 3,
     marginLeft: 1
   },
   fungens: {
-    fontFamily: '',
     color: '#195F57',
     marginTop: 14,
     marginLeft: 2
@@ -196,7 +209,7 @@ const styles = StyleSheet.create({
   image4: {
     width: 29,
     height: 58,
-    marginLeft: 17,
+    marginLeft: 110,
     marginTop: 10
   },
   rect6Row: {

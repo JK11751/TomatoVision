@@ -3,7 +3,7 @@ const data = [
       id: 1,
       image: require('../assets/images/animation_500_kcit151v.gif'),
       title: 'Be Healthy',
-      text: 'A Healthy Tomato Plant is Love. Take care of yout tomato crop. Be healthy',
+      text: 'A Healthy Tomato Plant is Love. Take care of your tomato crop. Be healthy',
     },
     {
       id: 2,

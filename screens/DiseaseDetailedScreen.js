@@ -69,12 +69,11 @@ const styles = StyleSheet.create({
     borderRadius: 27
   },
   amarylissPotato: {
-    fontFamily: '',
     color: '#121212',
     fontSize: 20,
     marginLeft: 2
   },
-  floatTxt: { top: 3, left: 4, color: 'white', fontFamily: '' },
+  floatTxt: { top: 3, left: 4, color: 'white' },
   floatBtn: {
     alignItems: 'center',
     justifyContent: 'center',
@@ -158,7 +157,6 @@ const styles = StyleSheet.create({
     marginLeft: 69
   },
   waterWeekly: {
-    fontFamily: '',
     color: '#121212',
     marginLeft: 2,
     marginTop: 2
@@ -173,10 +171,10 @@ const styles = StyleSheet.create({
   },
   rect3: {
     width: 326,
-    height: 250,
+    height: 370,
     backgroundColor: 'white',
     borderRadius: 12,
-    marginTop: 30,
+    marginTop: 10,
     marginLeft: 18,
     shadowColor: 'rgba(0,0,0,1)',
     shadowOffset: {
@@ -188,10 +186,10 @@ const styles = StyleSheet.create({
     shadowRadius: 10
   },
   loremIpsum1: {
-    fontFamily: '',
     color: '#121212',
     width: 315,
-    height: 176,
+    height: 300,
+    fontSize:18,
     textAlign: 'justify',
     marginTop: 30,
     marginLeft: 6
@@ -201,7 +199,7 @@ const styles = StyleSheet.create({
     color: 'black',
     textAlign: 'justify',
     fontSize: 20,
-    top: 10,
+    top: 5,
     marginLeft: 15
   },
   imageStack: {
