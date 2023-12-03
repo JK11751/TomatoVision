@@ -18,6 +18,7 @@
     "@tensorflow/tfjs": "^4.13.0",
     "@tensorflow/tfjs-react-native": "^0.8.0",
     "axios": "^1.6.2",
+    "eas-cli": "^5.9.1",
     "expo": "~49.0.15",
     "expo-camera": "~13.4.4",
     "expo-gl": "~13.0.1",
