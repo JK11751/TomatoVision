@@ -186,7 +186,7 @@ const styles = StyleSheet.create({
   },
   potatoEralyBright: {
     color: '#195F57',
-    fontSize:20,
+    fontSize:18,
     bottom: 7
   },
   mangoAppleOrange: {
