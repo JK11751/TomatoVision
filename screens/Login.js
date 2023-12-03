@@ -19,8 +19,8 @@ import { emailValidator } from "../helpers/emailValidator";
 import { passwordValidator } from "../helpers/passwordValidator";
 import { loginUser } from "../api/auth-api";
 
-const screenWidth = Dimensions.get('window').width;
-const inputFieldWidth = screenWidth * 0.4;
+const {width} = Dimensions.get('window');
+const inputFieldWidth = width * 0.8;
 
 const Login = () => {
   const navigation = useNavigation();
@@ -75,7 +75,7 @@ const Login = () => {
       source={require("../assets/Background.png")}
       style={{ flex: 1, backgroundColor: "white", alignItems: "center" }}
     >
-      <SafeAreaView style={{ flex: 1 }}>
+      <SafeAreaView style={{ flex: 1}}>
         
         <View marginTop={40}>
           <Image
@@ -100,6 +100,10 @@ const Login = () => {
               LogIn to your Account
             </Text>
           </View>
+          <View style={{ marginTop: 20 ,paddingHorizontal:30}}>
+
+
+
           <View style={{ marginTop: 70 }}>
             <View
               style={{
@@ -139,9 +143,11 @@ const Login = () => {
               />
             </View>
             {email.error ? <Text style={{ color: 'red' }}>{email.error}</Text> : null}
-          </View>
 
-          <View style={{ marginTop: 10 }}>
+
+
+          </View>
+  <View style={{ marginTop: 10 }}>
             <View
               style={{
                 flexDirection: "row",
@@ -178,13 +184,16 @@ const Login = () => {
             </View>
             {password.error ? <Text style={{ color: 'red' }}>{password.error}</Text> : null}
           </View>
+          </View>
+        
+        
 
           <View
             style={{
               marginTop: 12,
               flexDirection: "row",
               alignItems: "center",
-              justifyContent: "space-between",
+              justifyContent: "space-around",
             }}
           >
             <Text>Keep me logged in</Text>
@@ -198,7 +207,7 @@ const Login = () => {
 
           <Pressable
             style={{
-              width: 400,
+              width: width-20,
               backgroundColor: "green",
               borderRadius: 6,
               marginLeft: "auto",
@@ -220,7 +229,7 @@ const Login = () => {
               SignIn
             </Text>
           </Pressable>
-          <View style={{ flexDirection: "row", marginTop: 15 }}>
+          <View style={{ flexDirection: "row", marginTop: 15,justifyContent:'center' }}>
             <Text style={{ textAlign: "center", color: "gray", fontSize: 16 }}>
               Don’t have an account?{" "}
             </Text>

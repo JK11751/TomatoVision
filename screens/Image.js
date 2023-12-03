@@ -14,7 +14,9 @@ import {
 } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 import axios from "axios";
-
+import { COLORS } from "../constants/Colors";
+import { Dimensions } from "react-native";
+const{width}=Dimensions.get('window')
 axios.interceptors.request.use(
   async (config) => {
     let request = config;
@@ -142,7 +144,7 @@ const ImageScreen = () => {
     } finally {
       // Clear the image state once the prediction ends
       setLoading(false);
-      setImage(""); // Set image state to empty string or your default image path
+      // setImage(""); // Set image state to empty string or your default image path
     }
   };
   
@@ -181,13 +183,13 @@ const ImageScreen = () => {
             style={styles.image}
           />
         )}
-        <TouchableOpacity style={styles.detectButton} onPress={getResult}>
+        <View>
           {!isLoading ? (
-            <Text style={styles.detectButtonText}>Detect</Text>
+            <></>
           ) : (
-            <ActivityIndicator size="small" color="#fff" />
+            <ActivityIndicator size="large" color={COLORS.primary} />
           )}
-        </TouchableOpacity>
+        </View>
 
         <Modal
           animationType="slide"
@@ -205,12 +207,7 @@ const ImageScreen = () => {
                   <Text style={styles.resultText}>{label}</Text>
                 </Text>
 
-                <Text style={[styles.space, styles.labelText]}>
-                  {"Confidence: \n"}
-                  <Text style={styles.resultText}>
-                    {parseInt(parseFloat(result * 100).toFixed(0)) + "%"}
-                  </Text>
-                </Text>
+               
               </View>
               <TouchableOpacity
                 style={styles.closeButtonContainer}
@@ -275,7 +272,11 @@ const styles = StyleSheet.create({
   labelText: { color: "black", fontSize: 30, fontWeight: "bold" },
   resultText: { fontSize: 20, color: "green" },
   modalContent: {
+    flexDirection:'column',
+    justifyContent:'flex-start',
+    alignItems:'center',
     height: 260,
+    width:width-100,
     backgroundColor: "white",
     padding: 20,
     borderRadius: 10,
@@ -284,6 +285,9 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 16,
     padding: 10,
+    width:width/2,
+    textAlign:'center',
+    
   },
   iconContainer: {
     width: 48,

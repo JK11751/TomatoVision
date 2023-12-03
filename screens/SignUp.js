@@ -21,9 +21,8 @@ import { nameValidator } from "../helpers/nameValidator";
 import Toast from "react-native-root-toast";
 import { signUpUser } from "../api/auth-api";
 
-const screenWidth = Dimensions.get("window").width;
-const inputFieldWidth = screenWidth * 0.8;
-
+const {width} = Dimensions.get('window');
+const inputFieldWidth = width * 0.8;
 const SignUp = () => {
   const [name, setName] = useState({ value: "", error: "" });
   const [email, setEmail] = useState({ value: "", error: "" });
@@ -104,9 +103,9 @@ const SignUp = () => {
             >
               Create your Account
             </Text>
-          </View>
-          {/* Name Input */}
-          <View style={{ marginTop: 20 }}>
+            </View>
+            {/* Name Input */}
+        <View style={{ marginTop: 20 ,paddingHorizontal:30}}>
             <View
               style={{
                 flexDirection: "row",
@@ -117,7 +116,7 @@ const SignUp = () => {
                 borderRadius: 5,
                 marginTop: 30,
               }}
-            >
+             >
               <Ionicons
                 name="ios-person"
                 size={24}
@@ -138,13 +137,13 @@ const SignUp = () => {
                 error={!!name.error}
                 errorText={name.error}
               />
-            </View>
-            {name.error ? (
+             </View>
+             {name.error ? (
               <Text style={{ color: "red" }}>{name.error}</Text>
-            ) : null}
+             ) : null}
 
-            {/* Email Input */}
-            <View
+             {/* Email Input */}
+             <View
               style={{
                 flexDirection: "row",
                 alignItems: "center",
@@ -154,7 +153,7 @@ const SignUp = () => {
                 borderRadius: 5,
                 marginTop: 30,
               }}
-            >
+             >
               <MaterialIcons
                 style={{ marginLeft: 8 }}
                 name="email"
@@ -180,16 +179,14 @@ const SignUp = () => {
                 keyboardType="email-address"
                 placeholder="enter your Email"
               />
-            </View>
-            {email.error ? (
+              </View>
+              {email.error ? (
               <Text style={{ color: "red" }}>{email.error}</Text>
-            ) : null}
-          </View>
+              ) : null}
+              {/* Password Input */}
 
-          {/* Password Input */}
-          <View>
-            <View
-              style={{
+                   <View
+                style={{
                 flexDirection: "row",
                 alignItems: "center",
                 gap: 5,
@@ -198,7 +195,7 @@ const SignUp = () => {
                 borderRadius: 5,
                 marginTop: 30,
               }}
-            >
+              >
               <AntDesign
                 name="lock1"
                 size={24}
@@ -222,26 +219,42 @@ const SignUp = () => {
                 errorText={password.error}
                 placeholder="enter your Password"
               />
-            </View>
-            {password.error ? (
+              </View>
+              {password.error ? (
               <Text style={{ color: "red" }}>{password.error}</Text>
-            ) : null}
-          </View>
+               ) : null}
 
-          <View style={{ marginTop: 40 }} />
 
-          <TouchableOpacity
+
+
+
+
+
+
+
+
+              
+               </View>
+
+          
+              
+              
+              
+
+            <View style={{ marginTop: 40 }} />
+
+            <TouchableOpacity
             style={{
-              width: 400,
+              width: width-20,
               backgroundColor: "green",
               borderRadius: 6,
               marginLeft: "auto",
               marginRight: "auto",
               padding: 15,
-            }}
-            onPress={onSignUpPressed}
-          >
-            {!loading ? (
+              }}
+             onPress={onSignUpPressed}
+              >
+              {!loading ? (
               <Text
                 style={{
                   textAlign: "center",
@@ -252,26 +265,27 @@ const SignUp = () => {
               >
                 SignUp
               </Text>
-            ) : (
+              ) : (
               <ActivityIndicator size="small" color="#fff" />
-            )}
-          </TouchableOpacity>
+              )}
+              </TouchableOpacity>
 
-          <View style={{ flexDirection: "row", marginTop: 15 }}>
-            <Text
+              <View style={{ flexDirection: "row", marginTop: 15,justifyContent:'center' }}>
+              <Text
               style={{
                 textAlign: "center",
                 color: "gray",
                 fontSize: 16,
-              }}
-            >
+             
+               }}
+              >
               Already have an account?{" "}
-            </Text>
-            <TouchableOpacity onPress={() => navigation.navigate("Login")}>
+              </Text>
+              <TouchableOpacity onPress={() => navigation.navigate("Login")}>
               <Text style={{ fontWeight: "bold", color: "green" }}>Login</Text>
-            </TouchableOpacity>
-          </View>
-        </KeyboardAvoidingView>
+              </TouchableOpacity>
+            </View>
+                </KeyboardAvoidingView>
       </SafeAreaView>
     </ImageBackground>
   );
