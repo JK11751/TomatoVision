@@ -146,7 +146,7 @@ const styles = StyleSheet.create({
     position: "absolute",
   },
   rect: {
-    top: 150,
+    top: 100,
     width: 278,
     height: 513,
     position: "absolute",
@@ -320,26 +320,27 @@ const styles = StyleSheet.create({
     shadowRadius: 10,
   },
   today14Jul: {
-    fontFamily: "",
+   
     color: "#195F57",
-    fontSize: 14,
+    fontSize: 18,
   },
   today15: {
-    fontFamily: "",
+ 
     color: "#195F57",
     fontSize: 16,
     marginTop: 6,
   },
   sunset632Pm: {
-    fontFamily: "",
+  
     color: "#195F57",
-    fontSize: 13,
+    fontSize: 18,
     marginTop: 3,
     marginLeft: 1,
     width: 120,
   },
   today14JulColumn: {
     width: 154,
+    fontSize: 18,
     marginTop: 2,
   },
   image9: {
@@ -355,9 +356,9 @@ const styles = StyleSheet.create({
     marginRight: 16,
   },
   rainUntilAfternoon: {
-    fontFamily: "",
+   
     color: "#195F57",
-    fontSize: 13,
+    fontSize: 18,
     marginTop: 18,
     marginLeft: 15,
   },
@@ -372,7 +373,7 @@ const styles = StyleSheet.create({
     top: 178,
     left: 64,
     position: "absolute",
-    fontFamily: "",
+    
     color: "#121212",
     fontSize: 13,
   },
