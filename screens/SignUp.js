@@ -177,7 +177,7 @@ const SignUp = () => {
                 autoCompleteType="email"
                 textContentType="emailAddress"
                 keyboardType="email-address"
-                placeholder="enter your Email"
+                placeholder="enter your email"
               />
               </View>
               {email.error ? (
@@ -217,7 +217,7 @@ const SignUp = () => {
                 onChangeText={(text) => setPassword({ value: text, error: "" })}
                 error={!!password.error}
                 errorText={password.error}
-                placeholder="enter your Password"
+                placeholder="enter your password"
               />
               </View>
               {password.error ? (

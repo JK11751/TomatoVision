@@ -97,7 +97,7 @@ const Login = () => {
                 color: "#041E42",
               }}
             >
-              LogIn to your Account
+              Log into your Account
             </Text>
           </View>
           <View style={{ marginTop: 20 ,paddingHorizontal:30}}>
@@ -139,7 +139,7 @@ const Login = () => {
                 autoCompleteType="email"
                 textContentType="emailAddress"
                 keyboardType="email-address"
-                placeholder="enter your Email"
+                placeholder="enter your email"
               />
             </View>
             {email.error ? <Text style={{ color: 'red' }}>{email.error}</Text> : null}
@@ -174,7 +174,7 @@ const Login = () => {
                   width: inputFieldWidth,
                   fontSize: 16,
                 }}
-                placeholder="enter your Password"
+                placeholder="enter your password"
                 returnKeyType="done"
                 value={password.value}
                 onChangeText={(text) => setPassword({ value: text, error: "" })}
