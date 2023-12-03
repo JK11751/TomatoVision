@@ -270,12 +270,12 @@ const styles = StyleSheet.create({
   },
   space: { marginVertical: 10, marginHorizontal: 10 },
   labelText: { color: "black", fontSize: 30, fontWeight: "bold" },
-  resultText: { fontSize: 20, color: "green" },
+  resultText: { fontSize: 20,color: "green" },
   modalContent: {
     flexDirection:'column',
     justifyContent:'flex-start',
     alignItems:'center',
-    height: 260,
+    height: 165,
     width:width-100,
     backgroundColor: "white",
     padding: 20,
@@ -302,7 +302,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   closeButtonContainer: {
-    marginTop: 8,
+    marginTop: 20,
     borderRadius: 50,
     backgroundColor: "green",
 
