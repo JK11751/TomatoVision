@@ -17,7 +17,6 @@
         {
           "photosPermission": "Allow $(PRODUCT_NAME) to access your photos.",
           "cameraPermission": "Allow $(PRODUCT_NAME) to access your camera"
-         
         }
       ]
     ],
@@ -31,12 +30,18 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "permissions": [
+        "android.permission.RECORD_AUDIO"
+      ]
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "59ddad7f-b7f1-4aa3-a0d8-6c2c1a1431b3"
+      }
     }
-  
-    
   }
 }
